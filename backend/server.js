@@ -33,4 +33,4 @@ await connectDB();
 // API Endpoints
 app.use("/api/auth", authRouter);
 
-app.listen(() => console.log(`Server started running at PORT: ${PORT}`));
+app.listen(PORT, () => console.log(`Server started running at PORT: ${PORT}`));
