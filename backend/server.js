@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 
 import { connectDB } from "./config/db.js";
 import authRouter from "./routes/authRoutes.js";
+import subjectRouter from "./routes/subjectRoutes.js";
 
 const app = express();
 
@@ -32,5 +33,7 @@ await connectDB();
 
 // API Endpoints
 app.use("/api/auth", authRouter);
+
+app.use("/api/subjects", subjectRouter);
 
 app.listen(PORT, () => console.log(`Server started running at PORT: ${PORT}`));
