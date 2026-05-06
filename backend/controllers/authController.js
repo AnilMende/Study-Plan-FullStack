@@ -21,7 +21,18 @@ export const generateTokens = async (userId) => {
         { id: user._id },
         process.env.REFRESH_TOKEN_SECRET,
         { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
-    )
+    );
+
+    //Hash the refresh token and store it in db
+    const hashedRefreshToken = crypto
+    .createHash("sha256")
+    .update(refreshToken)
+    .digest("hex");
+
+    // then update the refreshtoken with hashedrefreshtoken
+    await User.findByIdAndUpdate(userId, {
+        refreshToken : hashedRefreshToken
+    });
 
     return { accessToken, refreshToken };
 }
@@ -78,27 +89,17 @@ export const userLogin = asyncHandler(async (req, res) => {
     //generate access and refresh tokens if the user is valid
     const { accessToken, refreshToken } = await generateTokens(user._id);
 
-    //we need to store the hashed refresh token in the db
-    const hashedRefreshToken = crypto
-        .createHash("sha256")
-        .update(refreshToken)
-        .digest("hex");
-
-    user.refreshToken = hashedRefreshToken;
-
-    await user.save({ validateBeforeSave: false });
-
     const cookieOptions = {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        maxAge: process.env.REFRESH_TOKEN_EXPIRY
+        maxAge: 7 * 24 * 60 * 60 * 1000
     }
 
     return res
         .status(200)
-        .cookie("accessToken", accessToken, { ...cookieOptions, maxAge: process.env.ACCESS_TOKEN_EXPIRY })
-        .cookie("refreshToken", refreshToken, { cookieOptions })
+        .cookie("accessToken", accessToken, { ...cookieOptions, maxAge: 15 * 60 * 1000 })
+        .cookie("refreshToken", refreshToken, { ...cookieOptions, maxAge : 7 * 24 * 60 * 60 * 1000 })
         .json(new ApiResponse(200, {
             accessToken,
             user: {

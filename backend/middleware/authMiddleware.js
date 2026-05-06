@@ -1,7 +1,11 @@
+import dotenv from "dotenv";
+dotenv.config();
 import { generateTokens } from "../controllers/authController.js";
-import User from "../models/userModel";
-import { ApiError } from "../utils/ApiError";
-import { asyncHandler } from "../utils/AsyncHandler";
+import User from "../models/userModel.js";
+import { asyncHandler } from "../utils/AsyncHandler.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import crypto from "node:crypto";
 
 import jwt from "jsonwebtoken";
 
@@ -14,8 +18,9 @@ export const verifyAccessToken = asyncHandler(async (req, res, next) => {
     }
 
     //if the token is avialable then verify the token
+    let decoded;
     try {
-        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     } catch (error) {
         throw new ApiError(401, "Token expired");
     }
@@ -40,11 +45,21 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
         throw new ApiError(401, "No refresh token");
     }
 
-    const decoded = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+    let decoded;
+    try {
+        decoded = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+    } catch (error) {
+        throw new ApiError(401, "Expired or invalid refresh token");
+    }
+
+    const hashedIncomingToken = crypto
+        .createHash("sha256")
+        .update(incomingRefreshToken)
+        .digest("hex");
 
     const user = await User.findById(decoded.id);
 
-    if (!user || user.refreshToken !== incomingRefreshToken) {
+    if (!user || user.refreshToken !== hashedIncomingToken) {
         throw new ApiError(401, "Invalid refresh token");
     }
 
@@ -55,12 +70,11 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        maxAge: process.env.REFRESH_TOKEN_EXPIRY
     }
 
     return res
-        .cookie("accessToken", accessToken, { ...cookieOptions, maxAge: process.env.ACCESS_TOKEN_EXPIRY })
-        .cookie("refreshToken", refreshToken, { cookieOptions })
+        .cookie("accessToken", accessToken, { ...cookieOptions, maxAge: 15 * 60 * 1000 })
+        .cookie("refreshToken", refreshToken, { ...cookieOptions, maxAge : 7 * 24 * 60 * 60 * 1000 })
         .json(
             new ApiResponse(200, { accessToken }, "Tokens refreshed")
         );

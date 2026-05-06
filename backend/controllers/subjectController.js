@@ -2,7 +2,7 @@ import Subject from "../models/subjectModel.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/AsyncHandler.js";
-
+import mongoose from "mongoose";
 
 // Create Subject
 export const createSubject = asyncHandler(async (req, res) => {
@@ -52,12 +52,15 @@ export const getAllSubjects = asyncHandler(async (req, res) => {
 export const getSubject = asyncHandler(async (req, res) => {
 
     const { id } = req.params;
-    const { userId } = req.user._id;
+    const userId = req.user._id;
+
+    //console.log("Searching for Subject:", id);
+    //console.log("Belonging to User:", userId);
 
     // find the subject with the id
-    const subject = await Subject.fidOne({
+    const subject = await Subject.findOne({
         _id: id,
-        userId,
+        userId: userId,
         isDeleted: false
     });
 
@@ -76,8 +79,10 @@ export const updateSubject = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const userId = req.user._id;
 
+    const { name } = req.body;
+
     const subject = await Subject.findOneAndUpdate(
-        { _id: id, userId, isDeleted: false },
+        { _id: id, userId : userId , isDeleted: false },
         {
             $set: {
                 name
