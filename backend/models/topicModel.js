@@ -7,7 +7,7 @@ const topicSchema = new mongoose.Schema({
         ref : "Subject",
         required : true
     },
-    
+
     userId : {
         type : mongoose.Schema.Types.ObjectId,
         ref : "User",
@@ -42,6 +42,11 @@ const topicSchema = new mongoose.Schema({
     revisionCount : {
         type : Number,
         default : 0
+    },
+
+    estimatedMinutes : {
+        type : Number,
+        default : 30
     },
 
     isDeleted : {

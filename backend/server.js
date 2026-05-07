@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import { connectDB } from "./config/db.js";
 import authRouter from "./routes/authRoutes.js";
 import subjectRouter from "./routes/subjectRoutes.js";
+import topicRouter from "./routes/topicRoutes.js";
 
 const app = express();
 
@@ -35,5 +36,8 @@ await connectDB();
 app.use("/api/auth", authRouter);
 
 app.use("/api/subjects", subjectRouter);
+
+app.use("/api/topics", topicRouter);
+
 
 app.listen(PORT, () => console.log(`Server started running at PORT: ${PORT}`));
