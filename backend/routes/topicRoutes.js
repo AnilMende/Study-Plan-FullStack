@@ -6,7 +6,7 @@ const topicRouter = express.Router();
 
 topicRouter.post("/create", verifyAccessToken, createTopic);
 
-topicRouter.get("/alltopics", verifyAccessToken, getAllTopics);
+topicRouter.get("/", verifyAccessToken, getAllTopics);
 
 topicRouter.get("/:id", verifyAccessToken, getTopic);
 

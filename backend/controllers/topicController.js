@@ -7,11 +7,11 @@ import { asyncHandler } from "../utils/AsyncHandler.js";
 
 export const createTopic = asyncHandler(async (req, res) => {
 
-    const { subjetId, title, priority, plannedDate, estimatedMinutes } = req.body;
+    const { subjectId, title, priority, plannedDate, estimatedMinutes } = req.body;
 
     const userId = req.user._id;
 
-    if (!subjetId || !title) {
+    if (!subjectId || !title) {
         throw new ApiError(400, "SubjectID or title are missing");
     }
 
@@ -44,10 +44,46 @@ export const getAllTopics = asyncHandler(async (req, res) => {
 
     const userId = req.user._id;
 
-    const topics = await Topic.find({
-        userId,
-        isDeleted: false
-    }).populate("subejctId", "name");
+    const { subjectId, status, date, search } = req.query;
+
+    // Base query
+    const query = { userId, isDeleted: false };
+
+    // Filter by subject
+    if (subjectId) {
+        query.subjectId = subjectId;
+    }
+
+    // Filter by status
+    if (status) {
+        query.status = status;
+    }
+
+    // Filter by planned date
+    if (date) {
+
+        const startDate = new Date(date);
+        const endDate = new Date(date);
+
+        endDate.setHours(23, 59, 59, 999);
+
+        query.plannedDate = {
+            $gte: startDate,
+            $lte: endDate
+        }
+    }
+
+    // Search by title
+    if (search) {
+        query.title = {
+            $regex: search,
+            $options: "i"
+        };
+    }
+
+    const topics = await Topic.find(query)
+        .populate("subjectId", "name")
+        .sort({ createdAt: -1 });
 
     return res.status(200).json(
         new ApiResponse(200, topics, "Topics fetched successfully")
@@ -81,22 +117,22 @@ export const updateTopic = asyncHandler(async (req, res) => {
 
     const { id } = req.params;
 
-    const {title, status, priority, plannedDate, estimatedMinutes} = req.body;
-    
+    const { title, status, priority, plannedDate, estimatedMinutes } = req.body;
+
     const userId = req.user._id;
 
     const topic = await Topic.findOne({
-        _id : id,
+        _id: id,
         userId,
-        isDeleted : false
+        isDeleted: false
     });
 
-    if(!topic){
+    if (!topic) {
         throw new ApiError(404, "Topic not found");
     }
 
     // handling completed date automatically
-    if(status === "completed" && topic.status !== "completed"){
+    if (status === "completed" && topic.status !== "completed") {
         topic.completedDate = new Date();
     }
 
@@ -123,22 +159,22 @@ export const deleteTopic = asyncHandler(async (req, res) => {
 
     const topic = await Topic.findOneAndUpdate(
         {
-            _id : id,
+            _id: id,
             userId,
-            isDeleted : false
+            isDeleted: false
         },
         {
-            isDeleted : true
+            isDeleted: true
         },
-        { new : true }
+        { new: true }
     );
 
-    if(!topic){
+    if (!topic) {
         throw new ApiError(404, "Topic not found");
     }
 
     return res.status(200).json(
         new ApiResponse(200, {}, "Topic deleted successfully")
     );
-    
+
 })
