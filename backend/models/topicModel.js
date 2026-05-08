@@ -57,8 +57,9 @@ const topicSchema = new mongoose.Schema({
 }, { timestamps : true });
 
 topicSchema.index({ userId : 1});
-topicSchema.index({ subjectId : 1 });
 topicSchema.index({ status : 1 });
+topicSchema.index({ completedDate : 1 });
+topicSchema.index({ subjectId : 1 });
 
 const Topic = mongoose.model("Topic", topicSchema);
 
