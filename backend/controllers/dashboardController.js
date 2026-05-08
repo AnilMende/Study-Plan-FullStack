@@ -1,7 +1,7 @@
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/AsyncHandler.js";
-import Subject from "./subjectModel.js";
-import Topic from "./topicModel.js";
+import Subject from "../models/subjectModel.js";
+import Topic from "../models/topicModel.js";
 
 
 export const getDashboardData = asyncHandler(async (req, res) => {
