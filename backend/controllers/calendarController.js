@@ -4,6 +4,13 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 
 import Topic from "../models/topicModel.js";
 
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat.js";
+import validateDate from "../utils/validateDate.js";
+// Safe Date validation
+dayjs.extend(customParseFormat);
+
+
 // Monthly Calendar API
 // this api returns summarized data per day
 
@@ -18,6 +25,14 @@ export const getMonthlyCalendar = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Month and year are required");
     }
 
+    if(month < 1 || month > 12){
+        throw new ApiError(400, "Month must me between 1 and 12");
+    }
+
+    if(year < 2000 || year > 2100){
+        throw new ApiError(400, "Invalid year");
+    }
+
     // Month start
     const startDate = new Date(year, month - 1, 1);
 
@@ -28,7 +43,7 @@ export const getMonthlyCalendar = asyncHandler(async (req, res) => {
 
         {
             $match: {
-                userID: req.user._id,
+                userId: req.user._id,
                 plannedDate: {
                     $gte: startDate,
                     $lte: endDate
@@ -94,6 +109,14 @@ export const getTopicsByDay = asyncHandler(async (req, res) => {
 
     if (!date) {
         throw new ApiError(400, "Date is required");
+    }
+
+    // Validate Format
+    if(!validateDate(date)){
+        throw new ApiError(
+            400,
+            "Invalid date format. Use YYYY-MM-DD"
+        );
     }
 
     const startDate = new Date(date);

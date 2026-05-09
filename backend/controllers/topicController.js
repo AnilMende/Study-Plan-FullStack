@@ -3,6 +3,7 @@ import Topic from "../models/topicModel.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/AsyncHandler.js";
+import validateDate from "../utils/validateDate.js";
 
 
 export const createTopic = asyncHandler(async (req, res) => {
@@ -13,6 +14,14 @@ export const createTopic = asyncHandler(async (req, res) => {
 
     if (!subjectId || !title) {
         throw new ApiError(400, "SubjectID or title are missing");
+    }
+
+    // Validate date Format
+    if (plannedDate && !validateDate(plannedDate)) {
+        throw new ApiError(
+            400,
+            "Invalid date format. Use YYYY-MM-DD"
+        );
     }
 
     // verify the subject belongs to the user by using the subjectId
@@ -60,6 +69,13 @@ export const getAllTopics = asyncHandler(async (req, res) => {
     }
 
     // Filter by planned date
+    if (date && !validateDate(date)) {
+        throw new ApiError(
+            400,
+            "Invalid date format. Use YYYY-MM-DD"
+        )
+    };
+
     if (date) {
 
         const startDate = new Date(date);
