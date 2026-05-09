@@ -6,10 +6,12 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 
 import { connectDB } from "./config/db.js";
+
 import authRouter from "./routes/authRoutes.js";
 import subjectRouter from "./routes/subjectRoutes.js";
 import topicRouter from "./routes/topicRoutes.js";
 import dashboardRouter from "./routes/dashboardRoutes.js";
+import calendarRouter from "./routes/calendarRoutes.js";
 
 const app = express();
 
@@ -41,6 +43,8 @@ app.use("/api/subjects", subjectRouter);
 app.use("/api/topics", topicRouter);
 
 app.use("/api/dashboard", dashboardRouter);
+
+app.use("/api/calendar", calendarRouter);
 
 
 app.listen(PORT, () => console.log(`Server started running at PORT: ${PORT}`));
