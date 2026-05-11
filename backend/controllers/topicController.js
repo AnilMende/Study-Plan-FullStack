@@ -3,6 +3,7 @@ import Topic from "../models/topicModel.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/AsyncHandler.js";
+import getNextRevisionDate from "../utils/getNextRevisionDate.js";
 import validateDate from "../utils/validateDate.js";
 
 
@@ -191,6 +192,47 @@ export const deleteTopic = asyncHandler(async (req, res) => {
 
     return res.status(200).json(
         new ApiResponse(200, {}, "Topic deleted successfully")
+    );
+
+})
+
+// Revise topics
+export const reviseTopic = asyncHandler(async (req, res) => {
+
+    const { id } = req.params;
+
+    const userId = req.user._id;
+
+    const topic = await Topic.findOne({
+        _id: id,
+        userId,
+        isDeleted: false
+    });
+
+    if (!topic) {
+        throw new ApiError(404, "Topic not found");
+    }
+
+    // increase revision count
+    topic.revisionCount += 1;
+
+    // update revision count
+    topic.lastRevisedDate = new Date();
+
+    // Schedule next revision
+    topic.plannedDate = getNextRevisionDate(topic.revisionCount);
+
+    // Update status
+    topic.status = "revision";
+
+    await topic.save();
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            topic,
+            "Topic scheduled for revision"
+        )
     );
 
 })

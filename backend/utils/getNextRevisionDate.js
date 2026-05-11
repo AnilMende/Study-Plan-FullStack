@@ -1,6 +1,6 @@
 
 
-const getRevisionDate = (revisionCount) => {
+const getNextRevisionDate = (revisionCount) => {
 
     const today = new Date();
 
@@ -33,4 +33,4 @@ const getRevisionDate = (revisionCount) => {
     return today;
 }
 
-export default getRevisionDate;
+export default getNextRevisionDate;
