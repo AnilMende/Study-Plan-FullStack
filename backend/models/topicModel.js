@@ -43,6 +43,10 @@ const topicSchema = new mongoose.Schema({
         type : Number,
         default : 0
     },
+    
+    lastRevisedDate : {
+        type : Date
+    },
 
     estimatedMinutes : {
         type : Number,
