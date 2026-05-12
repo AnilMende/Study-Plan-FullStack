@@ -1,7 +1,7 @@
 import express from "express";
 import {
     createSubject, deleteSubject, getAllSubjects,
-    getSubject, updateSubject
+    getSubject, getSubjectProgress, updateSubject
 } from "../controllers/subjectController.js";
 import { verifyAccessToken } from "../middleware/authMiddleware.js";
 
@@ -16,5 +16,8 @@ subjectRouter.get("/:id", verifyAccessToken, getSubject);
 subjectRouter.put("/update/:id", verifyAccessToken, updateSubject);
 
 subjectRouter.delete("/delete/:id", verifyAccessToken, deleteSubject);
+
+// Subject progress
+subjectRouter.get("/:id/progress", verifyAccessToken, getSubjectProgress);
 
 export default subjectRouter;

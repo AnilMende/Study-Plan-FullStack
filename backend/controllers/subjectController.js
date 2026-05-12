@@ -1,4 +1,5 @@
 import Subject from "../models/subjectModel.js";
+import Topic from "../models/topicModel.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/AsyncHandler.js";
@@ -82,7 +83,7 @@ export const updateSubject = asyncHandler(async (req, res) => {
     const { name } = req.body;
 
     const subject = await Subject.findOneAndUpdate(
-        { _id: id, userId : userId , isDeleted: false },
+        { _id: id, userId: userId, isDeleted: false },
         {
             $set: {
                 name
@@ -121,6 +122,103 @@ export const deleteSubject = asyncHandler(async (req, res) => {
 
     return res.status(200).json(
         new ApiResponse(200, {}, "Subject deleted successfully")
+    );
+
+});
+
+// Subject specific analytics
+// Subject progress
+export const getSubjectProgress = asyncHandler(async (req, res) => {
+
+    const { id } = req.params;
+
+    const userId = req.user._id;
+
+    // Verify if the subject exists
+    const subject = await Subject.findOne({
+        _id: id,
+        userId,
+        isDeleted: false
+    });
+
+    if (!subject) {
+        throw new ApiError(404, "Subject not found");
+    }
+
+    // Total topics in that subject
+    const totalTopics = await Topic.countDocuments({
+        subjectId: id,
+        userId,
+        isDeleted: false
+    });
+
+    // Completed topics => status : "completed"
+    const completedTopics = await Topic.countDocuments({
+        subjectId: id,
+        userId,
+        status: "completed",
+        isDeleted: false
+    });
+
+    // Pending topics => status : "pending"
+    const pendingTopics = await Topic.countDocuments({
+        subjectId: id,
+        userId,
+        status: "pending",
+        isDeleted: false
+    });
+
+    // Revision topics => status : "revision"
+    const revisionTopics = await Topic.countDocuments({
+        subjectId: id,
+        userId,
+        status: "revision",
+        isDeleted: false
+    });
+
+    // Study-time aggregation
+    const studyTime = await Topic.aggregate([
+
+        {
+            $match: {
+                subjectId: new mongoose.Types.ObjectId(id),
+                userId: new mongoose.Types.ObjectId(userId),
+                isDeleted: false
+            }
+        },
+
+        {
+            $group: {
+                _id: null,
+                totalMinutes: {
+                    $sum: "$estimatedMinutes"
+                }
+            }
+        }
+    ]);
+
+    const totalStudyMinutes = studyTime[0]?.totalMinutes || 0;
+
+    // Completion %
+    const completionPercentage = totalTopics === 0 ? 0 : Math.round(
+        (completedTopics / totalTopics) * 100
+    );
+
+    return res.status(200).json(
+
+        new ApiResponse(
+            200,
+            {
+                subject: subject.name,
+                totalTopics,
+                completedTopics,
+                pendingTopics,
+                revisionTopics,
+                completionPercentage,
+                totalStudyMinutes
+            },
+            "Subject progress fetched successfully"
+        )
     );
 
 });
