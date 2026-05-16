@@ -5,6 +5,8 @@ import {
     Settings, LogOut
 } from "lucide-react";
 
+import { NavLink } from "react-router-dom";
+
 const navItems = [
     {
         name: "Dashboard",
@@ -38,16 +40,17 @@ const Sidebar = () => {
 
             <div>
                 {/* Logo */}
-                <div className="w-[250px] bg-white border-r border-gray-200 flex flex-col justify-between">
+                <div className="flex items-center gap-2 px-6 py-4 hover:bg-slate-50 rounded-lg cursor-pointer group">
 
-                    <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center 
-                    justify-center text-white font-bold">
-                        S
+                    <div className="text-blue-500 flex items-center justify-center">
+                        <BookOpen className="w-5 h-5 fill-blue-500" strokeWidth={2} />
                     </div>
 
-                    <h1 className="text-xl font-bold text-gray-900">
+                    <span className="text-sm font-semibold text-slate-700 
+                    group-hover:text-slate-900 transition-colors">
                         StudyPlan
-                    </h1>
+                    </span>
+
                 </div>
 
                 {/* Navigation */}
