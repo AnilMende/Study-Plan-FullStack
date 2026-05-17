@@ -1,6 +1,7 @@
 import StatsCard from "../components/Cards/StatsCard.jsx";
 
 import { CheckCircle2, Clock3, Flame, NotebookPen } from "lucide-react";
+import SubjectProgress from "../components/dashboard/SubjectsProgress.jsx";
 
 const Dashboard = () => {
     return (
@@ -63,15 +64,11 @@ const Dashboard = () => {
 
             </div>
 
-            {/* Placeholder Sections */}
+            {/* Middle Grid */}
             <div className="grid grid-cols-2 gap-6">
 
                 {/* Subjects Progress */}
-                <div className="bg-white rounded-2xl border border-gray-200 p-6 min-h-[320px]">
-
-                    <h3 className="text-lg font-semibold text-gray-900 mb-6">Subjects Progress</h3>
-
-                </div>
+                <SubjectProgress/>
 
                 {/* Today's Plan */}
                 <div className="bg-white rounded-2xl border border-gray-200 p-6 min-h-[320px]">
