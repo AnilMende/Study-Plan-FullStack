@@ -2,7 +2,7 @@ import { Bell, Search } from "lucide-react";
 
 const Navbar = () => {
     return (
-        <header className="h-20 bg-white border-b border-gray-200 px-6 flex items-center justify-between">
+        <header className="h-20 w-full bg-white border-b border-gray-200 px-6 flex items-center justify-between">
 
             {/* Left */}
             <div>

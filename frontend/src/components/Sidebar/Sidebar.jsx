@@ -36,7 +36,7 @@ const navItems = [
 ]
 const Sidebar = () => {
     return (
-        <aside className="w-[250px] bg-white border-r border-gray-200 flex flex-col justify-between">
+        <aside className="w-[250px] h-full bg-white border-r border-gray-200 flex flex-col justify-between">
 
             <div>
                 {/* Logo */}
@@ -79,18 +79,20 @@ const Sidebar = () => {
                         })
                     }
                 </nav>
-
-                {/* Logout */}
-                <div className="p-4 border-t border-gray-100">
-
-                    <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-500 
-                    hover:bg-gray-100 transition-all">
-
-                        <LogOut size={20} />
-                        <span>Logout</span>
-                    </button>
-                </div>
             </div>
+
+            {/* Bottom Section */}
+            {/* Logout */}
+            <div className="p-4 border-t border-gray-100 bg-white">
+
+                <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-500 
+                    hover:bg-gray-100 transition-all cursor-pointer">
+                    <LogOut size={20} />
+                    <span>Logout</span>
+                </button>
+
+            </div>
+
         </aside>
     )
 }
