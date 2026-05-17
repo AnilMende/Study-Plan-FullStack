@@ -2,6 +2,8 @@ import StatsCard from "../components/Cards/StatsCard.jsx";
 
 import { CheckCircle2, Clock3, Flame, NotebookPen } from "lucide-react";
 import SubjectProgress from "../components/dashboard/SubjectsProgress.jsx";
+import TodaysPlan from "../components/dashboard/TodaysPlan.jsx";
+import RecentActivity from "../components/dashboard/RecentActivity.jsx";
 
 const Dashboard = () => {
     return (
@@ -68,29 +70,14 @@ const Dashboard = () => {
             <div className="grid grid-cols-2 gap-6">
 
                 {/* Subjects Progress */}
-                <SubjectProgress/>
+                <SubjectProgress />
 
                 {/* Today's Plan */}
-                <div className="bg-white rounded-2xl border border-gray-200 p-6 min-h-[320px]">
-
-                    <h3 className="text-lg font-semibold text-gray-900 mb-6">Today's Plan</h3>
-
-                </div>
+                <TodaysPlan />
 
             </div>
 
-            {/* Recent Activity */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-6 min-h-[120px]">
-
-                <div className="flex items-center justify-between mb-4">
-
-                    <h3 className="text-lg font-semibold text-gray-900">Recent Activity</h3>
-
-                    <button className="text-blue-600 font-medium">View All</button>
-
-                </div>
-
-            </div>
+            <RecentActivity />
 
         </div>
     )
