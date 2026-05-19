@@ -16,8 +16,9 @@ import calendarRouter from "./routes/calendarRoutes.js";
 const app = express();
 
 app.use(cors({
-    origin : "*",
-    methods : ["GET", "POST", "PUT", "UPDATE", "DELETE"]
+    origin : "http://localhost:5173",
+    methods : ["GET", "POST", "PUT", "UPDATE", "DELETE"],
+    credentials : true
 }));
 
 app.use(cookieParser());
