@@ -3,6 +3,7 @@ import DashboardLayout from "../layouts/DashboardLayout.jsx";
 import Dashboard from "../pages/Dashboard.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import Login from "../pages/auth/Login.jsx";
+import Register from "../pages/auth/Register.jsx";
 
 
 const AppRoutes = () => {
@@ -15,6 +16,11 @@ const AppRoutes = () => {
                 <Route
                     path="/login"
                     element={<Login />}
+                />
+
+                <Route
+                    path="/register"
+                    element={<Register />}
                 />
 
                 {/* Dashboard should be protected */}

@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { registerUser } from "../../services/authService";
+import toast from "react-hot-toast";
 
 const Register = () => {
 
@@ -15,7 +16,7 @@ const Register = () => {
             [e.target.name]: e.target.value
         });
 
-    }
+    };
 
     const handleSubmit = async (e) => {
 
@@ -23,63 +24,84 @@ const Register = () => {
 
         try {
 
-            const response = await registerUser(formData);
+            await registerUser(formData);
 
-            setFormData(response.data.user);
+            toast.success("Registered Successfully");
 
             navigate("/login");
 
         } catch (error) {
-            console.log(error);
-            navigate("/register");
+            // console.log(error);
+            toast.error("Registration failed");
         }
     }
 
     return (
-        <div>
+        <div className="min-h-screen flex items-center justify-center bg-[#f5f7fb]">
 
-            <form onSubmit={handleSubmit}>
+            <form
+                onSubmit={handleSubmit}
+                className="w-full max-w-md bg-white p-8 rounded-2xl border border-gray-200"
+            >
 
-                <h1>Register</h1>
+                <h1 className="text-3xl font-bold mb-8 text-center">Register</h1>
 
                 {/* username */}
-                <div>
-                    <label >Name</label>
+                <div className="mb-5">
+                    <label className="block mb-2 text-sm font-medium">Name</label>
                     <input
                         type="text"
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        placeholder="Enter name" />
+                        placeholder="Name"
+                        className="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+                    />
 
                 </div>
 
                 {/* Email */}
-                <div>
-                    <label >Email</label>
+                <div className="mb-5">
+                    <label className="block mb-2 text-sm font-medium">Email</label>
                     <input
                         type="email"
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        placeholder="Enter email" />
+                        placeholder="Email"
+                        className="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+                    />
                 </div>
 
                 {/* Password */}
-                <div>
-                    <label >Password</label>
+                <div className="mb-5">
+                    <label className="block mb-2 text-sm font-medium">Password</label>
                     <input
                         type="password"
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
-                        placeholder="Enter password" />
+                        placeholder="Password"
+                        className="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+                    />
                 </div>
 
                 {/* Registe button */}
-                <button type="submit" navigate="/login">Register</button>
+                <button
+                    type="submit"
+                    navigate="/login"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl 
+                    font-semibold transition-all"
+                >
+                    Register
+                </button>
 
-
+                <p className="text-center text-sm text-gray-500 mt-2">
+                    Already Have an Account?{" "}
+                    <Link to="/login" className="text-blue-600 font-medium hover:underline">
+                        Login
+                    </Link>
+                </p>
             </form>
         </div>
     )

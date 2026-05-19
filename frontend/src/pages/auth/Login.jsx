@@ -1,7 +1,8 @@
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext.jsx";
 import { useState } from "react";
-import { loginUser } from "../../services/authService";
+import { loginUser } from "../../services/authService.js";
+import toast from "react-hot-toast";
 
 const Login = () => {
 
@@ -36,11 +37,14 @@ const Login = () => {
 
             setUser(response.data.user);
 
+            toast.success("Logged in successfully");
+
             navigate("/");
 
         } catch (error) {
 
-            console.log(error);
+            // console.log(error);
+            toast.error("Invalid email or password");
 
             alert(error?.response?.data?.message);
         } finally {
@@ -100,6 +104,13 @@ const Login = () => {
                         loading ? "Loading in..." : "Login"
                     }
                 </button>
+
+                <p className="text-center text-sm text-gray-500 mt-2">
+                    Don't have an account?{" "}
+                    <Link to="/register" className="text-blue-600 font-medium hover:underline">
+                        Register Here
+                    </Link>
+                </p>
 
             </form>
 
