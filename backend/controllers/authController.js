@@ -25,13 +25,13 @@ export const generateTokens = async (userId) => {
 
     //Hash the refresh token and store it in db
     const hashedRefreshToken = crypto
-    .createHash("sha256")
-    .update(refreshToken)
-    .digest("hex");
+        .createHash("sha256")
+        .update(refreshToken)
+        .digest("hex");
 
     // then update the refreshtoken with hashedrefreshtoken
     await User.findByIdAndUpdate(userId, {
-        refreshToken : hashedRefreshToken
+        refreshToken: hashedRefreshToken
     });
 
     return { accessToken, refreshToken };
@@ -99,7 +99,7 @@ export const userLogin = asyncHandler(async (req, res) => {
     return res
         .status(200)
         .cookie("accessToken", accessToken, { ...cookieOptions, maxAge: 15 * 60 * 1000 })
-        .cookie("refreshToken", refreshToken, { ...cookieOptions, maxAge : 7 * 24 * 60 * 60 * 1000 })
+        .cookie("refreshToken", refreshToken, { ...cookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 })
         .json(new ApiResponse(200, {
             accessToken,
             user: {
@@ -141,4 +141,12 @@ export const userLogout = asyncHandler(async (req, res) => {
         .json(
             new ApiResponse(200, {}, "Logged out successfully")
         )
+})
+
+// get current user
+export const getCurrentUser = asyncHandler(async (req, res) => {
+
+    return res.status(200).json(
+        new ApiResponse(200, req.user, "Current user fetched")
+    );
 })
