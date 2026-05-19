@@ -4,8 +4,33 @@ import { CheckCircle2, Clock3, Flame, NotebookPen } from "lucide-react";
 import SubjectProgress from "../components/dashboard/SubjectsProgress.jsx";
 import TodaysPlan from "../components/dashboard/TodaysPlan.jsx";
 import RecentActivity from "../components/dashboard/RecentActivity.jsx";
+import { useEffect, useState } from "react";
+import { getDashboardStats } from "../services/dashboardService.js";
 
 const Dashboard = () => {
+
+    const [stats, setStats] = useState(null);
+
+    // Fetch Data
+    useEffect(() => {
+
+        const fetchStats = async () => {
+
+            try {
+
+                const data = await getDashboardStats();
+
+                setStats(data);
+
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchStats();
+    }, []);
+
+
     return (
         <div className="space-y-6">
 
@@ -14,7 +39,7 @@ const Dashboard = () => {
 
                 <StatsCard
                     title="Total Topics"
-                    value="128"
+                    value={stats?.totalTopics || 0}
                     subtitle="View all"
                     icon={
                         <NotebookPen
@@ -27,7 +52,7 @@ const Dashboard = () => {
 
                 <StatsCard
                     title="Completed Today"
-                    value="7"
+                    value={stats?.completedToday || 0}
                     subtitle="View all"
                     icon={
                         <CheckCircle2
@@ -40,7 +65,7 @@ const Dashboard = () => {
 
                 <StatsCard
                     title="Pending Tasks"
-                    value="24"
+                    value={stats?.pendingTasks || 0}
                     subtitle="View all"
                     icon={
                         <Clock3
@@ -53,7 +78,7 @@ const Dashboard = () => {
 
                 <StatsCard
                     title="Current Streak"
-                    value="12"
+                    value={stats?.currentStreak || 0}
                     subtitle="days"
                     icon={
                         <Flame
