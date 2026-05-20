@@ -74,7 +74,7 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
 
     return res
         .cookie("accessToken", accessToken, { ...cookieOptions, maxAge: 15 * 60 * 1000 })
-        .cookie("refreshToken", refreshToken, { ...cookieOptions, maxAge : 7 * 24 * 60 * 60 * 1000 })
+        .cookie("refreshToken", refreshToken, cookieOptions)
         .json(
             new ApiResponse(200, { accessToken }, "Tokens refreshed")
         );
