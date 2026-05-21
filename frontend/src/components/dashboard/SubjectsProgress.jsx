@@ -1,34 +1,38 @@
-import SubjectProgressCard from "./SubjectProjectCard"
+import { useEffect, useState } from "react"
+import SubjectProgressCard from "./SubjectProjectCard.jsx"
+import { getAllSubjectsProgress } from "../../services/subjectService.js";
 
-
-const subjects = [
-    {
-        name: "Data Structures",
-        progress: 70,
-        totalTopics: 40,
-        color: "bg-green-500"
-    },
-    {
-        name: "Database Management",
-        progress: 50,
-        totalTopics: 28,
-        color: "bg-blue-500"
-    },
-    {
-        name: "Operating Systems",
-        progress: 30,
-        totalTopics: 20,
-        color: "bg-yellow-500"
-    },
-    {
-        name: "Computer Networks",
-        progress: 20,
-        totalTopics: 15,
-        color: "bg-purple-500"
-    }
-]
+const colors = [
+    "bg-blue-500",
+    "bg-green-500",
+    "bg-purple-500",
+    "bg-orange-500",
+    "bg-pink-500"
+];
 
 const SubjectProgress = () => {
+
+    const [subjects, setSubjects] = useState([]);
+
+    useEffect(() => {
+
+        const fetchSubjects = async () => {
+
+            try {
+
+                const data = await getAllSubjectsProgress();
+
+                setSubjects(data);
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        fetchSubjects();
+
+    }, []);
+
     return (
         <div className="bg-white rounded-2xl border border-gray-200 p-6">
 
@@ -43,10 +47,13 @@ const SubjectProgress = () => {
             {/* Subjects */}
             <div className="space-y-6">
                 {
-                    subjects.map((subject) => (
+                    subjects.map((subject, index) => (
                         <SubjectProgressCard
                             key={subject.name}
                             {...subject}
+                            color={
+                                colors[index % colors.length]
+                            }
                         />
                     ))
                 }

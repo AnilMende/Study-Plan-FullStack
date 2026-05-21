@@ -1,9 +1,9 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL : "http://localhost:5000/api",
+    baseURL: "http://localhost:5000/api",
 
-    withCredentials : true
+    withCredentials: true
 });
 
 // Refresh token request state
@@ -17,9 +17,9 @@ const processQueue = (error) => {
 
     failedQueue.forEach((promise) => {
 
-        if(error){
+        if (error) {
             promise.reject(error)
-        } else{
+        } else {
             promise.resolve();
         }
     });
@@ -31,7 +31,7 @@ const processQueue = (error) => {
 api.interceptors.response.use(
 
     // Success
-    (response) =>  response,
+    (response) => response,
 
     // Error
     async (error) => {
@@ -39,13 +39,18 @@ api.interceptors.response.use(
         const originalRequest = error.config;
 
         // if access token expired
-        if(error.response?.status === 401 && !originalRequest._retry){
+        if (error.response?.status === 401 &&
+            !originalRequest._retry &&
+            !originalRequest.url.includes("/auth/login") &&
+            !originalRequest.url.includes("/auth/register") &&
+            !originalRequest.url.includes("/auth/refresh-token") &&
+            !originalRequest.url.includes("/auth/me")) {
 
             // prevent infinite retry loop
             originalRequest._retry = true;
 
             // if refresh already happening
-            if(isRefreshing){
+            if (isRefreshing) {
 
                 return new Promise(
                     (resolve, reject) => {
@@ -64,7 +69,7 @@ api.interceptors.response.use(
             isRefreshing = true;
 
             try {
-                
+
                 // call refresh endpoint
                 await api.post("/auth/refresh-token");
 
@@ -75,14 +80,14 @@ api.interceptors.response.use(
                 return api(originalRequest);
 
             } catch (refreshError) {
-                
+
                 processQueue(refreshError);
 
                 // Logout situation
                 window.location.href = "/login";
 
                 return Promise.reject(refreshError);
-            } finally{
+            } finally {
 
                 isRefreshing = false;
 

@@ -14,3 +14,10 @@ export const getSubjectProgress = async (id) => {
 
     return response.data.data;
 }
+
+export const getAllSubjectsProgress = async () => {
+
+    const response = await api.get("/subjects/progress");
+
+    return response.data.data;
+}
