@@ -21,7 +21,7 @@ const activities = [
     }
 ];
 
-const RecentActivity = () => {
+const RecentActivity = ({ refreshKey }) => {
     return (
         <div className="bg-white rounded-2xl border border-gray-200 p-6">
 

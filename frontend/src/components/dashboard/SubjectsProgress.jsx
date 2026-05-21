@@ -10,7 +10,7 @@ const colors = [
     "bg-pink-500"
 ];
 
-const SubjectProgress = () => {
+const SubjectProgress = ({ refreshKey }) => {
 
     const [subjects, setSubjects] = useState([]);
 
@@ -31,7 +31,7 @@ const SubjectProgress = () => {
 
         fetchSubjects();
 
-    }, []);
+    }, [refreshKey]);
 
     return (
         <div className="bg-white rounded-2xl border border-gray-200 p-6">

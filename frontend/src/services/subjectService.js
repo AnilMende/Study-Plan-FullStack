@@ -1,9 +1,11 @@
 
 import api from "../api/axios.js";
 
-export const getAllSubjecs = async () => {
+export const getAllSubjects = async () => {
 
     const response = await api.get("/subjects/all");
+
+    //console.log(response.data.data);
 
     return response.data.data;
 }

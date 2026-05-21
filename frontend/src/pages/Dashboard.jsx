@@ -6,10 +6,15 @@ import TodaysPlan from "../components/dashboard/TodaysPlan.jsx";
 import RecentActivity from "../components/dashboard/RecentActivity.jsx";
 import { useEffect, useState } from "react";
 import { getDashboardStats } from "../services/dashboardService.js";
+import { useOutletContext } from "react-router-dom";
 
 const Dashboard = () => {
 
     const [stats, setStats] = useState(null);
+
+    // For automatic updation
+    const { refreshKey } = useOutletContext();
+
 
     // Fetch Data
     useEffect(() => {
@@ -95,14 +100,14 @@ const Dashboard = () => {
             <div className="grid grid-cols-2 gap-6">
 
                 {/* Subjects Progress */}
-                <SubjectProgress />
+                <SubjectProgress refreshKey={refreshKey} />
 
                 {/* Today's Plan */}
-                <TodaysPlan />
+                <TodaysPlan refreshKey={refreshKey} />
 
             </div>
 
-            <RecentActivity />
+            <RecentActivity refreshKey={refreshKey} />
 
         </div>
     )

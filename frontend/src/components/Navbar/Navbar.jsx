@@ -1,6 +1,16 @@
 import { Bell, Search } from "lucide-react";
+import getInitials from "../../utils/getInitials.js";
+import { useAuth } from "../../context/AuthContext.jsx";
+import { useState } from "react";
+import AddTopicModal from "../dashboard/AddTopicModal.jsx";
 
-const Navbar = () => {
+const Navbar = ({ onTopicCreated }) => {
+
+    const { user } = useAuth();
+
+    const [openModal, setOpenModal] = useState(false);
+
+
     return (
         <header className="h-20 w-full bg-white border-b border-gray-200 px-6 flex items-center justify-between">
 
@@ -30,8 +40,10 @@ const Navbar = () => {
                 </div>
 
                 {/* Add Button */}
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 
-                rounded-xl font-medium transition-all">
+                <button
+                    onClick={() => setOpenModal(true)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 
+                rounded-xl font-medium transition-all cursor-pointer">
                     + Add Topic
                 </button>
 
@@ -42,15 +54,24 @@ const Navbar = () => {
                 </button>
 
                 {/* Avatar */}
-                <div className="w-11 h-11 rounded-full bg-gray-300 overflow-hidden">
-                    <img
-                        src="https://i.pravatar.cc/100"
-                        alt="profile"
-                        className="w-full h-full object-cover"
-                    />
+                <div className="w-11 h-11 rounded-full bg-blue-600 text-white flex items-center 
+                justify-center font-semibold text-sm">
+                    {getInitials(user?.name)}
                 </div>
-                
+
             </div>
+            {
+                openModal && (
+                    <AddTopicModal
+                        onClose={
+                            () => setOpenModal(false)
+                        }
+                        onTopicCreated={
+                            onTopicCreated
+                        }
+                    />
+                )
+            }
         </header>
     )
 }
