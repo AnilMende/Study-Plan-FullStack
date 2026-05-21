@@ -73,10 +73,37 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
     }
 
     return res
-        .cookie("accessToken", accessToken, { ...cookieOptions, maxAge: 15 * 60 * 1000 })
+        .cookie("accessToken", accessToken, cookieOptions)
         .cookie("refreshToken", refreshToken, cookieOptions)
         .json(
             new ApiResponse(200, { accessToken }, "Tokens refreshed")
         );
 
+})
+
+export const optionalAuth = asyncHandler(async (req, res, next) => {
+
+    try {
+
+        const token = req.cookies?.accessToken;
+
+        if (!token) {
+            req.user = null;
+
+            return next();
+        }
+
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+
+        const user = await User.findById(decoded.id).select("-password");
+
+        req.user = user || null;
+
+        next();
+
+    } catch (error) {
+
+        req.user = null;
+        next();
+    }
 })

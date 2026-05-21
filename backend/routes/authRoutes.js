@@ -1,6 +1,6 @@
 import express from "express";
 import { getCurrentUser, userLogin, userLogout, userRegister } from "../controllers/authController.js";
-import { refreshAccessToken, verifyAccessToken } from "../middleware/authMiddleware.js";
+import { optionalAuth, refreshAccessToken, verifyAccessToken } from "../middleware/authMiddleware.js";
 
 const authRouter = express.Router();
 
@@ -10,7 +10,7 @@ authRouter.post("/login", userLogin);
 
 authRouter.post("/refresh-token", refreshAccessToken);
 
-authRouter.get("/me", verifyAccessToken, getCurrentUser);
+authRouter.get("/me", optionalAuth, getCurrentUser);
 
 authRouter.post("/logout", verifyAccessToken, userLogout);
 

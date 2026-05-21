@@ -98,8 +98,8 @@ export const userLogin = asyncHandler(async (req, res) => {
 
     return res
         .status(200)
-        .cookie("accessToken", accessToken, { ...cookieOptions, maxAge: 15 * 60 * 1000 })
-        .cookie("refreshToken", refreshToken, { ...cookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 })
+        .cookie("accessToken", accessToken, cookieOptions)
+        .cookie("refreshToken", refreshToken, cookieOptions)
         .json(new ApiResponse(200, {
             accessToken,
             user: {
@@ -147,6 +147,6 @@ export const userLogout = asyncHandler(async (req, res) => {
 export const getCurrentUser = asyncHandler(async (req, res) => {
 
     return res.status(200).json(
-        new ApiResponse(200, req.user, "Current user fetched")
+        new ApiResponse(200, req.user || null, "Current user fetched")
     );
 })

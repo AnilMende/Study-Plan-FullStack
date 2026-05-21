@@ -222,3 +222,57 @@ export const getSubjectProgress = asyncHandler(async (req, res) => {
     );
 
 });
+
+export const getAllSubjectsProgress = asyncHandler(async (req, res) => {
+
+    const userId = req.user._id;
+
+    // Get all subjects
+    const subjects = await Subject.find({
+        userId,
+        isDeleted: false
+    });
+
+    // Build progress data
+    const progressData = await Promise.all(
+
+        subjects.map(async (subject) => {
+
+            // Total topics
+            const totalTopics = await Topic.countDocuments({
+                subjectId: subject._id,
+                userId,
+                isDeleted: false
+            });
+
+            // Completed topics
+            const completedTopics = await Topic.countDocuments({
+                subjectId: subject._id,
+                userId,
+                status: "completed",
+                isDeleted: false
+            });
+
+            // Progress %
+            const progress = totalTopics === 0 ? 0 : Math.round((completedTopics / totalTopics) * 100);
+
+            return {
+                _id: subject._id,
+                name: subject.name,
+                totalTopics,
+                completedTopics,
+                progress
+            };
+        })
+    );
+
+    return res.status(200).json(
+
+        new ApiResponse(
+            200,
+            progressData,
+            "Subjects progress fetched successfully"
+        )
+    );
+
+});
