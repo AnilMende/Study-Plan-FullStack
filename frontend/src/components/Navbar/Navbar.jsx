@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext.jsx";
 import { useState } from "react";
 import AddTopicModal from "../dashboard/AddTopicModal.jsx";
 import SearchDropdown from "../dashboard/searchDropdown.jsx";
+import NotificationDropdown from "../dashboard/NotificationDropdown.jsx";
 
 const Navbar = ({ onTopicCreated }) => {
 
@@ -50,10 +51,11 @@ const Navbar = ({ onTopicCreated }) => {
                 </button>
 
                 {/* Notification */}
-                <button className="w-11 h-11 rounded-xl border border-gray-200 flex items-center 
+                {/* <button className="w-11 h-11 rounded-xl border border-gray-200 flex items-center 
                 justify-center hover:bg-gray-100">
                     <Bell size={20} className="text-gray-600" />
-                </button>
+                </button> */}
+                <NotificationDropdown/>
 
                 {/* Avatar */}
                 <div className="w-11 h-11 rounded-full bg-blue-600 text-white flex items-center 
