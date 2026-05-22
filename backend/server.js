@@ -12,6 +12,7 @@ import subjectRouter from "./routes/subjectRoutes.js";
 import topicRouter from "./routes/topicRoutes.js";
 import dashboardRouter from "./routes/dashboardRoutes.js";
 import calendarRouter from "./routes/calendarRoutes.js";
+import searchRouter from "./routes/searchRoutes.js";
 
 const app = express();
 
@@ -46,6 +47,8 @@ app.use("/api/topics", topicRouter);
 app.use("/api/dashboard", dashboardRouter);
 
 app.use("/api/calendar", calendarRouter);
+
+app.use("/api/search", searchRouter);
 
 
 app.listen(PORT, () => console.log(`Server started running at PORT: ${PORT}`));
