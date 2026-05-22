@@ -3,6 +3,7 @@ import getInitials from "../../utils/getInitials.js";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useState } from "react";
 import AddTopicModal from "../dashboard/AddTopicModal.jsx";
+import SearchDropdown from "../dashboard/searchDropdown.jsx";
 
 const Navbar = ({ onTopicCreated }) => {
 
@@ -30,12 +31,13 @@ const Navbar = ({ onTopicCreated }) => {
                         className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
                     />
 
-                    <input
+                    {/* <input
                         type="text"
                         placeholder="Search topics, subjects..."
                         className="w-[260px] pl-10 pr-4 py-3 rounded-xl border border-gray-200 
                         outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                    /> */}
+                    <SearchDropdown/>
 
                 </div>
 
