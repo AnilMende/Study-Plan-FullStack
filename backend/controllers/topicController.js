@@ -236,3 +236,46 @@ export const reviseTopic = asyncHandler(async (req, res) => {
     );
 
 })
+
+// Update the topic status whether it is pending, completed or revision
+export const upadteTopicStatus = asyncHandler( async(req, res) => {
+
+    const userId = req.user._id;
+
+    const { id } = req.params;
+
+    const { status } = req.body;
+
+    // find the topic based on the id
+    const topic = await Topic.findOne({
+
+        _id : id,
+        userId,
+        isDeleted : false
+
+    });
+
+    if(!topic){
+        throw new ApiError(404, "Topic not found");
+    }
+
+    // if the topic is found then change the status
+    topic.status = status;
+
+    // completed date
+    if(status === "completed"){
+        topic.completedDate = new Date();
+    }
+
+    // then save the topic with new info in db
+    await topic.save();
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            topic,
+            "Topic status updated"
+        )
+    );
+
+})
