@@ -57,7 +57,7 @@ const Sidebar = () => {
     }
 
     return (
-        <aside className="w-[250px] h-full bg-white border-r border-gray-200 flex flex-col justify-between">
+        <aside className="w-[240px] h-screen sticky top-0 bg-white border-r border-gray-200 flex flex-col justify-between">
 
             <div>
                 {/* Logo */}
@@ -88,7 +88,7 @@ const Sidebar = () => {
                                     className={({ isActive }) =>
                                         `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
                                     ${isActive
-                                            ? "bg-blue-50 text-blue-600 font-semibold"
+                                            ? "bg-blue-50 text-blue-600 border border-blue-100 shadow-sm font-semibold"
                                             : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
                                         }`
                                     }

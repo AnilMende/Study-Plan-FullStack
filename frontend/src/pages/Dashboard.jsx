@@ -1,4 +1,4 @@
-import StatsCard from "../components/Cards/StatsCard.jsx";
+import StatsCard from "../components/cards/StatsCard.jsx";
 
 import { CheckCircle2, Clock3, Flame, NotebookPen } from "lucide-react";
 import SubjectProgress from "../components/dashboard/SubjectsProgress.jsx";
@@ -33,7 +33,7 @@ const Dashboard = () => {
         };
 
         fetchStats();
-    }, []);
+    }, [refreshKey]);
 
 
     return (
