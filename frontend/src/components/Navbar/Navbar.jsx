@@ -5,6 +5,8 @@ import { useState } from "react";
 import AddTopicModal from "../dashboard/AddTopicModal.jsx";
 import SearchDropdown from "../dashboard/searchDropdown.jsx";
 import NotificationDropdown from "../dashboard/NotificationDropdown.jsx";
+import { useLocation } from "react-router-dom";
+import { pageTitles } from "../../utils/pageTitles.js";
 
 const Navbar = ({ onTopicCreated }) => {
 
@@ -12,13 +14,19 @@ const Navbar = ({ onTopicCreated }) => {
 
     const [openModal, setOpenModal] = useState(false);
 
+    const location = useLocation();
+
+    const currentTitle = pageTitles[location.pathname] || "Dashboard";
+
 
     return (
         <header className="h-20 w-full bg-white border-b border-gray-200 px-6 flex items-center justify-between">
 
             {/* Left */}
             <div>
-                <h2 className="text-2xl font-bold text-gray-900">Dashboard</h2>
+                <h2 className="text-2xl font-bold text-gray-900">
+                    {currentTitle}
+                </h2>
             </div>
 
             {/* Right */}

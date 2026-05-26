@@ -2,7 +2,7 @@ import api from "../api/axios.js"
 
 export const getMonthlyCalendar = async (month, year) => {
 
-    const response = await api.get(`/calendar/month=${month}&year=${year}`);
+    const response = await api.get(`/calendar?month=${month}&year=${year}`);
 
     return response.data.data;
 }

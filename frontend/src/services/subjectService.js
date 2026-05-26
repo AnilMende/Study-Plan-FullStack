@@ -23,3 +23,17 @@ export const getAllSubjectsProgress = async () => {
 
     return response.data.data;
 }
+
+export const createSubject = async (data) => {
+
+    const response = await api.post("/subjects/create", data);
+
+    return response.data.data;
+}
+
+export const deleteSubject = async (id) => {
+
+    const response = await api.delete(`/subjects/delete/${id}`);
+
+    return response.data.data;
+}
