@@ -21,6 +21,8 @@ export const getAllSubjectsProgress = async () => {
 
     const response = await api.get("/subjects/progress");
 
+    //console.log(response.data.data);
+
     return response.data.data;
 }
 

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { getAllSubjects } from "../services/subjectService.js";
+import { getAllSubjectsProgress } from "../services/subjectService.js";
 import SubjectsHeader from "../components/subjects/SubjectsHeader.jsx";
 import SubjectsGrid from "../components/subjects/SubjectsGrid.jsx";
 import CreateSubjectModel from "../components/subjects/CreateSubjectModel.jsx";
@@ -23,11 +23,11 @@ const SubjectsPage = () => {
 
             try {
 
-                const data = await getAllSubjects();
+                const data = await getAllSubjectsProgress();
 
                 setSubjects(data);
 
-                console.log(data);
+                //console.log(data);
 
             } catch (error) {
 

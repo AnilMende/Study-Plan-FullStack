@@ -11,7 +11,6 @@ const SubjectCard = ({ subject }) => {
         totalTopics = 0,
         progress = 0,
         color = "#3B82F6",
-        icon
     } = subject;
 
 
@@ -30,7 +29,7 @@ const SubjectCard = ({ subject }) => {
                     className="text-2xl"
                     style={{ color }}
                 >
-                    {icon || "📘"}
+                    {"📘"}
                 </div>
 
             </div>
