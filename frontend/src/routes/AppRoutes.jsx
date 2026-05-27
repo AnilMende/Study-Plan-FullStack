@@ -6,6 +6,7 @@ import Login from "../pages/auth/Login.jsx";
 import Register from "../pages/auth/Register.jsx";
 import CalendarPage from "../pages/CalendarPage.jsx";
 import SubjectsPage from "../pages/SubjectsPage.jsx";
+import SubjectDetailsPage from "../pages/SubjectDetailsPage.jsx";
 
 
 const AppRoutes = () => {
@@ -39,6 +40,11 @@ const AppRoutes = () => {
                     <Route
                         path="/subjects"
                         element={<SubjectsPage />}
+                    />
+
+                    <Route
+                        path="/subjects/:subjectId"
+                        element={<SubjectDetailsPage />}
                     />
 
                     <Route

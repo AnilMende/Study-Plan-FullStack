@@ -21,3 +21,19 @@ export const getTopicsByDate = async (date) => {
 
     return response.data.data;
 }
+
+export const getTopics = async (params = {}) => {
+
+    const response = await api.get("/topics", { params });
+
+    // console.log(response.data.data);
+
+    return response.data.data;
+}
+
+export const deleteTopic = async (id) => {
+
+    const response = await api.delete(`/topics/deleted/${id}`);
+
+    return response.data.data;
+}

@@ -39,3 +39,10 @@ export const deleteSubject = async (id) => {
 
     return response.data.data;
 }
+
+export const getSubject = async (id) => {
+
+    const response = await api.get(`/subjects/${id}`);
+
+    return response.data.data;
+}
