@@ -127,7 +127,7 @@ const CalendarGrid = ({
                 {/* Date */}
                 <div
                     className={`
-                        w-8 h-8 rounded-full
+                        w-7 h-7 rounded-full
                         flex items-center justify-center
                         text-sm font-medium
                         ${isToday

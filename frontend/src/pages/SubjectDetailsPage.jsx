@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { getSubject } from "../services/subjectService.js";
 import { deleteTopic, getTopics, updateTopicStatus } from "../services/topicsService.js";
 import TopicsTable from "../components/topics/TopicsTable.jsx";
+import AddTopicModal from "../components/topics/AddTopicModal.jsx";
 
 const SubjectDetailsPage = () => {
 
@@ -20,6 +21,9 @@ const SubjectDetailsPage = () => {
     const [search, setSearch] = useState("");
 
     const [statusFilter, setStatusFilter] = useState("all");
+
+    // for opening the add topic moda
+    const [openModal, setOpenModal] = useState(false);
 
     // Fetch subjects + data
     useEffect(() => {
@@ -158,6 +162,16 @@ const SubjectDetailsPage = () => {
 
                         </div>
 
+                        <div>
+                            <button
+                                onClick={() => setOpenModal(true)}
+                                className="bg-blue-600 hover:bg-blue-700 text-white 
+                            px-5 py-3 mt-2 rounded-xl font-medium transition-all cursor-pointer"
+                            >
+                                + Add Topic
+                            </button>
+                        </div>
+
                     </div>
 
                 </div>
@@ -238,6 +252,25 @@ const SubjectDetailsPage = () => {
                             Start adding topics to this subject
                         </p>
                     </div>
+                )
+            }
+
+            {/* AddTopicModal */}
+            {
+                openModal && (
+                    <AddTopicModal
+                        subjectId={subjectId}
+                        onClose={() => setOpenModal(false)}
+                        onTopoicCreated={(newTopic) => {
+
+                            setTopics((prev) => [
+                                newTopic,
+                                ...prev
+                            ]);
+
+                        }}
+
+                    />
                 )
             }
 
