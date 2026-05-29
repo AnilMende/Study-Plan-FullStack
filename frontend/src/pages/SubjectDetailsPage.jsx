@@ -2,9 +2,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getSubject } from "../services/subjectService.js";
-import { deleteTopic, getTopics, updateTopicStatus } from "../services/topicsService.js";
+import { deleteTopic, getTopics, updateTopic, updateTopicStatus } from "../services/topicsService.js";
 import TopicsTable from "../components/topics/TopicsTable.jsx";
 import AddTopicModal from "../components/topics/AddTopicModal.jsx";
+import SubjectStats from "../components/topics/SubjectStats.jsx";
+import toast from "react-hot-toast";
 
 const SubjectDetailsPage = () => {
 
@@ -22,8 +24,20 @@ const SubjectDetailsPage = () => {
 
     const [statusFilter, setStatusFilter] = useState("all");
 
-    // for opening the add topic moda
+    // for opening the add topic modal
     const [openModal, setOpenModal] = useState(false);
+
+    // Stats for the SubjectStats component
+    const stats = {
+
+        total: topics.length,
+
+        completed: topics.filter(topic => topic.status === "completed").length,
+
+        pending: topics.filter(topic => topic.status === "pending").length,
+
+        revision: topics.filter(topic => topic.status === "revision").length
+    };
 
     // Fetch subjects + data
     useEffect(() => {
@@ -84,8 +98,11 @@ const SubjectDetailsPage = () => {
                 )
             );
 
+            toast.success("Topic Deleted");
+
         } catch (error) {
-            console.log(error);
+            //console.log(error);
+            toast.error("Failed to delete Topic");
         }
     };
 
@@ -102,9 +119,26 @@ const SubjectDetailsPage = () => {
                 )
             );
 
+            toast.success("Topic to Revise");
+
         } catch (error) {
-            console.log(error);
+            //console.log(error);
+            toast.error("Failed to update Topic status");
         }
+    };
+
+
+    // on the edit of the topic details
+    const handleTopicEdit = async (id, updatedTopic) => {
+
+        setTopics((prev) =>
+            prev.map((topic) =>
+                topic._id === id
+                    ? updatedTopic
+                    : topic
+            )
+        );
+
     };
 
     // Progress Calculation
@@ -178,6 +212,11 @@ const SubjectDetailsPage = () => {
 
             </div>
 
+            {/* Subject stats */}
+            {
+                <SubjectStats stats={stats} />
+            }
+
             {/* Filters */}
             <div className="bg-white rounded-2xl border border-gray-100 p-5 
               flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
@@ -236,8 +275,9 @@ const SubjectDetailsPage = () => {
 
                     <TopicsTable
                         topics={filteredTopics}
-                        onDeleted={handleDelete}
+                        onDelete={handleDelete}
                         onStatusChange={handleStatusChange}
+                        onTopicEdit={handleTopicEdit}
                     />
                 ) : (
 

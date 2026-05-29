@@ -2,7 +2,7 @@
 
 const statusStyles = {
     pending: "bg-yellow-100 text-yellow-700",
-    completed: "bg-green-100 text-yellow-700",
+    completed: "bg-green-100 text-green-700",
     revision: "bg-purple-100 text-purple-700"
 }
 

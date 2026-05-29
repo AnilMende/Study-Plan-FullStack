@@ -67,7 +67,7 @@ const AddTopicModal = ({ subjectId, onClose, onTopoicCreated }) => {
 
             onTopoicCreated(newTopic);
 
-            toast.success("Topic created successfully");
+            toast.success("Topic created");
 
             reset();
 
@@ -75,6 +75,7 @@ const AddTopicModal = ({ subjectId, onClose, onTopoicCreated }) => {
 
         } catch (error) {
             console.log(error);
+            toast.error("Error In Creation Topic");
         }
     };
 

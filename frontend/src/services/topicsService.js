@@ -37,3 +37,10 @@ export const deleteTopic = async (id) => {
 
     return response.data.data;
 }
+
+export const updateTopic = async (id, data) => {
+
+    const response = await api.put(`/topics/update/${id}`, data);
+
+    return response.data.data;
+}
