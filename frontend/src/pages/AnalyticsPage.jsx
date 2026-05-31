@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { getAnalyticsData } from "../services/analyticsService.js";
 import AnalyticsStats from "../components/analytics/AnalyticsStats.jsx";
 import WeeklyActivityChart from "../components/analytics/WeeklyActivityChart.jsx";
+import SubjectProgressAnalytics from "../components/analytics/SubjectProgressAnalytics.jsx";
+import ProductivityInsights from "../components/analytics/ProductivityInsights.jsx";
 
 
 const AnalyticsPage = () => {
@@ -57,6 +59,16 @@ const AnalyticsPage = () => {
 
             <WeeklyActivityChart
                 data={analytics.completedTrend}
+            />
+
+            <SubjectProgressAnalytics
+                subjects={analytics.subjectProgress}
+            />
+
+            <ProductivityInsights
+                insights={analytics.insights}
+                completionRate={analytics.completionRate}
+                totalStudyMinutes={analytics.totalStudyMinutes}
             />
         </div>
     )
