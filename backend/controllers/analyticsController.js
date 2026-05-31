@@ -71,6 +71,14 @@ export const getAnalyticsData = asyncHandler(async (req, res) => {
         }
     ]);
 
+    // formatted trend
+    const formattedTrend = completedTrend.map((item) => ({
+
+        date : item._id,
+
+        completed : item.completed
+    }));
+
     // Status Distribution
     const statusDistribution = await Topic.aggregate([
 
@@ -255,7 +263,7 @@ export const getAnalyticsData = asyncHandler(async (req, res) => {
                     revision : revisionTopics.length
                 },
 
-                completedTrend,
+                completedTrend : formattedTrend,
 
                 statusDistribution,
 
