@@ -1,6 +1,6 @@
 import express from "express";
 import { verifyAccessToken } from "../middleware/authMiddleware.js";
-import { createTopic, deleteTopic, getAllTopics, getTopic, 
+import { createTopic, deleteTopic, getAllTopics, getRevisionTopics, getTopic, 
     reviseTopic, upadteTopicStatus, updateTopic } from "../controllers/topicController.js";
 
 const topicRouter = express.Router();
@@ -29,5 +29,8 @@ topicRouter.patch("/:id/revise", verifyAccessToken, reviseTopic);
 
 // update topic status
 topicRouter.patch("/:id/status", verifyAccessToken, upadteTopicStatus);
+
+// revision topics
+topicRouter.get("/revision/all", verifyAccessToken, getRevisionTopics);
 
 export default topicRouter;

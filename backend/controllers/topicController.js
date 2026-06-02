@@ -279,3 +279,32 @@ export const upadteTopicStatus = asyncHandler( async(req, res) => {
     );
 
 })
+
+// get revision topics
+export const getRevisionTopics = asyncHandler(async (req, res) => {
+
+    const topics = await Topic.find({
+
+        userId : req.user._id,
+        status : "revision",
+        isDeleted : false
+
+    }).populate(
+        "subjectId",
+        "name"
+    )
+    .sort({
+        updatedAt : -1
+    })
+
+    return res.status(200).json(
+
+        new ApiResponse(
+
+            200,
+            topics,
+            "Revision topics fetched"
+
+        )
+    );
+})
