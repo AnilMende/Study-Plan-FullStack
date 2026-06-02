@@ -2,7 +2,8 @@
 import {
     BarChart3, BookOpen,
     CalendarDays, LayoutDashboard,
-    Settings, LogOut
+    Settings, LogOut,
+    RotateCcw
 } from "lucide-react";
 
 import { NavLink } from "react-router-dom";
@@ -20,6 +21,11 @@ const navItems = [
         name: "Subjects",
         path: "/subjects",
         icon: BookOpen
+    },
+    {
+        name : "Revision",
+        path : "/revision",
+        icon : RotateCcw
     },
     {
         name: "Calendar",

@@ -44,3 +44,18 @@ export const updateTopic = async (id, data) => {
 
     return response.data.data;
 }
+
+
+export const getRevisionTopics = async () => {
+
+    const response = await api.get("/topics/revision/all");
+
+    return response.data.data;
+}
+
+export const reviseTopic = async (id) => {
+
+    const response = await api.patch(`/topics/${id}/revise`);
+
+    return response.data.data;
+}

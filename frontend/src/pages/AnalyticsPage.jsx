@@ -6,6 +6,7 @@ import SubjectProgressAnalytics from "../components/analytics/SubjectProgressAna
 import ProductivityInsights from "../components/analytics/ProductivityInsights.jsx";
 import StatusDistributionCard from "../components/analytics/StatusDistributionCard.jsx";
 import AnalyticsHeader from "../components/analytics/AnalyticsHeader.jsx";
+import AnalyticsFilter from "../components/analytics/AnalyticsFilter.jsx";
 
 
 const AnalyticsPage = () => {
@@ -15,13 +16,16 @@ const AnalyticsPage = () => {
 
     const [loading, setLoading] = useState(true);
 
+    // for the analytics filter
+    const [range, setRange] = useState(30);
+
     useEffect(() => {
 
         const fetchAnalyticsData = async () => {
 
             try {
 
-                const data = await getAnalyticsData();
+                const data = await getAnalyticsData(range);
 
                 setAnalytics(data);
 
@@ -39,7 +43,7 @@ const AnalyticsPage = () => {
 
         fetchAnalyticsData();
 
-    }, [])
+    }, [range])
 
 
     if (loading) {
@@ -55,7 +59,12 @@ const AnalyticsPage = () => {
     return (
         <div className="space-y-6">
 
-            <AnalyticsHeader/>
+            <AnalyticsHeader />
+
+            <AnalyticsFilter
+                range={range}
+                setRange={setRange}
+            />
 
             <AnalyticsStats
                 analytics={analytics}

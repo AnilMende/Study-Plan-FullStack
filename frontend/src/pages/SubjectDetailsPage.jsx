@@ -71,19 +71,36 @@ const SubjectDetailsPage = () => {
     }, [subjectId]);
 
     // Filtered topics
-    const filteredTopics = useMemo(() => {
+    // const filteredTopics = useMemo(() => {
 
-        return topics.filter((topic) => {
+    //     return topics.filter((topic) => {
 
-            const matchesSearch = topic.title.toLowerCase().includes(search.toLowerCase());
+    //         const matchesSearch = topic.title.toLowerCase().includes(search.toLowerCase());
 
-            const matchesStatus = statusFilter === "all" || topic.status === statusFilter;
+    //         const matchesStatus = statusFilter === "all" || topic.status === statusFilter;
 
-            return matchesSearch && matchesStatus;
+    //         return matchesSearch && matchesStatus;
 
-        });
+    //     });
 
-    }, [topics, search, statusFilter]);
+    // }, [topics, search, statusFilter]);
+    const filteredTopics = topics.filter((topic) => {
+
+        const matchesStatus = statusFilter === "all"
+            ? true
+            : topic.status === statusFilter;
+
+        const matchesSearch = topic.title
+            .toLowerCase()
+            .includes(
+                search.toLowerCase()
+            );
+
+        return (
+            matchesStatus && matchesSearch
+        );
+
+    })
 
     // Delete topic
     const handleDelete = async (id) => {
@@ -119,7 +136,7 @@ const SubjectDetailsPage = () => {
                 )
             );
 
-            toast.success("Topic to Revise");
+            toast.success("Topic status Updated");
 
         } catch (error) {
             //console.log(error);

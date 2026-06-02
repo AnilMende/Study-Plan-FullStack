@@ -8,6 +8,7 @@ import CalendarPage from "../pages/CalendarPage.jsx";
 import SubjectsPage from "../pages/SubjectsPage.jsx";
 import SubjectDetailsPage from "../pages/SubjectDetailsPage.jsx";
 import AnalyticsPage from "../pages/AnalyticsPage.jsx";
+import RevisionPage from "../pages/RevisionPage.jsx";
 
 
 const AppRoutes = () => {
@@ -46,6 +47,11 @@ const AppRoutes = () => {
                     <Route
                         path="/subjects/:subjectId"
                         element={<SubjectDetailsPage />}
+                    />
+
+                    <Route
+                        path="/revision"
+                        element={<RevisionPage />}
                     />
 
                     <Route
