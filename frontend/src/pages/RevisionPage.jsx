@@ -3,6 +3,7 @@ import { getRevisionTopics, reviseTopic } from "../services/topicsService.js";
 
 import toast from "react-hot-toast";
 import RevisionTable from "../components/revision/RevisionTable.jsx";
+import RevisionStats from "../components/revision/RevisionStats.jsx";
 
 const RevisionPage = () => {
 
@@ -75,13 +76,15 @@ const RevisionPage = () => {
 
             </div>
 
-            <div>
+            <RevisionStats
+                topics={topics}
+            />
 
-                <RevisionTable
-                    topics={topics}
-                    onMarkRevised={handleMarkRevised}
-                />
-            </div>
+            <RevisionTable
+                topics={topics}
+                onMarkRevised={handleMarkRevised}
+            />
+
         </div>
     )
 }
