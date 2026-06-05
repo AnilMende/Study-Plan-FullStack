@@ -1,7 +1,7 @@
 import express from "express";
 import { verifyAccessToken } from "../middleware/authMiddleware.js";
 import { getDashboardData } from "../controllers/dashboardController.js";
-import { getAnalyticsData } from "../controllers/analyticsController.js";
+import { getAnalyticsData, getStreakData } from "../controllers/analyticsController.js";
 
 const dashboardRouter = express.Router();
 
@@ -17,5 +17,8 @@ dashboardRouter.get("/analytics", verifyAccessToken, getAnalyticsData);
 // API usage :
 // Last 30 days : /api/dashboard/analytics
 // Last 7 days : /api/dashboard/analytics?range=7
+
+// get streak data api
+dashboardRouter.get("/analytics/streak", verifyAccessToken, getStreakData);
 
 export default dashboardRouter;

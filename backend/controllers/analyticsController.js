@@ -74,9 +74,9 @@ export const getAnalyticsData = asyncHandler(async (req, res) => {
     // formatted trend
     const formattedTrend = completedTrend.map((item) => ({
 
-        date : item._id,
+        date: item._id,
 
-        completed : item.completed
+        completed: item.completed
     }));
 
     // Status Distribution
@@ -255,25 +255,175 @@ export const getAnalyticsData = asyncHandler(async (req, res) => {
 
                 totalStudyMinutes,
 
-                total : {
-                    completed : completedTopics.length,
+                total: {
+                    completed: completedTopics.length,
 
-                    pending : pendingTopics.length,
+                    pending: pendingTopics.length,
 
-                    revision : revisionTopics.length
+                    revision: revisionTopics.length
                 },
 
-                completedTrend : formattedTrend,
+                completedTrend: formattedTrend,
 
                 statusDistribution,
 
-                subjectProgress : formattedSubjectProgress,
+                subjectProgress: formattedSubjectProgress,
 
                 insights
             },
-            
+
             "Analytics fetched successfully"
         )
     );
 
+});
+
+// Streak Data API
+
+export const getStreakData = asyncHandler(async (req, res) => {
+
+    const userId = req.user._id;
+
+    // get all completed topics
+    const topics = await Topic.find({
+        userId,
+        isDeleted: false,
+        $or: [
+            { completedDate: { $ne: null } },
+            { lastRevisedDate: { $ne: null } }
+        ]
+    }).select("completedDate lastRevisedDate")
+
+
+    // get unique study dates
+    const studyDates = [
+        ...new Set(
+
+            topics.flatMap(topic => {
+
+                const dates = [];
+
+                if (topic.completedDate) {
+
+                    dates.push(
+                        topic.completedDate
+                            .toISOString()
+                            .split("T")[0]
+                    );
+                }
+
+                if (topic.lastRevisedDate) {
+
+                    dates.push(
+                        topic.lastRevisedDate
+                            .toISOString()
+                            .split("T")[0]
+                    );
+                }
+
+                return dates;
+            })
+        )
+    ].sort();
+
+    // Current Streak
+    let currentStreak = 0;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    let checkDate = new Date(today);
+
+    // if the checkDate is in studyDate increment the currentStreak
+    while (studyDates.includes(
+        checkDate.toISOString().split("T")[0]
+    )) {
+        currentStreak++;
+
+        checkDate.setDate(
+            checkDate.getDate() - 1
+        );
+    }
+
+    // Longest Streak
+    let longestStreak = 0;
+    let streak = 0;
+
+    for (let i = 0; i < studyDates.length; i++) {
+
+        if (i === 0) {
+            streak = 1;
+        } else {
+
+            const prev = new Date(studyDates[i - 1]);
+
+            const curr = new Date(studyDates[i]);
+
+            const diffDays = (curr - prev) / (1000 * 60 * 60 * 24);
+
+            if (diffDays === 1) {
+                streak++;
+            } else {
+                streak = 1;
+            }
+        }
+
+        longestStreak = Math.max(longestStreak, streak);
+    }
+
+    // Study Days this month
+    const startOfMonth = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        1
+    );
+
+    const studyDaysThisMonth = studyDates.filter(date =>
+        new Date(date) >= startOfMonth
+    ).length;
+
+    // Last 7 Days
+    const last7Days = [];
+
+    for (let i = 6; i >= 0; i--) {
+
+        const date = new Date(today);
+
+        date.setDate(
+            today.getDate() - 1
+        );
+
+        const dateString = date.toISOString().split("T")[0];
+
+        last7Days.push({
+            date: dateString,
+            studied:
+                studyDates.includes(
+                    dateString
+                )
+        });
+    }
+
+    // total revisions
+    const totalRevisions = topics.reduce(
+        (sum, topic) =>
+            sum + topic.revisionCount,
+        0
+    );
+
+    return res.status(200).json(
+
+        new ApiResponse(
+            200,
+            {
+                currentStreak,
+                longestStreak,
+                studyDaysThisMonth,
+                totalStudyDays: studyDates.length,
+                totalRevisions,
+                last7Days
+            },
+            "Streak data fetched successfully"
+        )
+    );
 });
