@@ -3,7 +3,8 @@ import {
     BarChart3, BookOpen,
     CalendarDays, LayoutDashboard,
     Settings, LogOut,
-    RotateCcw
+    RotateCcw,
+    Flame
 } from "lucide-react";
 
 import { NavLink } from "react-router-dom";
@@ -23,9 +24,14 @@ const navItems = [
         icon: BookOpen
     },
     {
-        name : "Revision",
-        path : "/revision",
-        icon : RotateCcw
+        name: "Revision",
+        path: "/revision",
+        icon: RotateCcw
+    },
+    {
+        name: "Streak",
+        path: "/streak",
+        icon: Flame
     },
     {
         name: "Calendar",

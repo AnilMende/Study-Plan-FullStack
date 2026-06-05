@@ -6,5 +6,6 @@ export const pageTitles = {
     "/calendar" : "Calendar",
     "/analytics" : "Analytics",
     "/settings" : "Settings",
-    "/revision" : "Revision"
+    "/revision" : "Revision",
+    "/streak" : "Streak"
 }

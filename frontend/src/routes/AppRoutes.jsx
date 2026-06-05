@@ -9,6 +9,7 @@ import SubjectsPage from "../pages/SubjectsPage.jsx";
 import SubjectDetailsPage from "../pages/SubjectDetailsPage.jsx";
 import AnalyticsPage from "../pages/AnalyticsPage.jsx";
 import RevisionPage from "../pages/RevisionPage.jsx";
+import StreakPage from "../pages/StreakPage.jsx";
 
 
 const AppRoutes = () => {
@@ -52,6 +53,11 @@ const AppRoutes = () => {
                     <Route
                         path="/revision"
                         element={<RevisionPage />}
+                    />
+
+                    <Route
+                        path="/streak"
+                        element={<StreakPage />}
                     />
 
                     <Route
