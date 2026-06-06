@@ -292,8 +292,7 @@ export const getStreakData = asyncHandler(async (req, res) => {
             { completedDate: { $ne: null } },
             { lastRevisedDate: { $ne: null } }
         ]
-    }).select("completedDate lastRevisedDate")
-
+    }).select("completedDate lastRevisedDate revisionCount");
 
     // get unique study dates
     const studyDates = [
@@ -390,7 +389,7 @@ export const getStreakData = asyncHandler(async (req, res) => {
         const date = new Date(today);
 
         date.setDate(
-            today.getDate() - 1
+            today.getDate() - i
         );
 
         const dateString = date.toISOString().split("T")[0];
@@ -398,9 +397,7 @@ export const getStreakData = asyncHandler(async (req, res) => {
         last7Days.push({
             date: dateString,
             studied:
-                studyDates.includes(
-                    dateString
-                )
+                studyDates.includes(dateString)
         });
     }
 
@@ -410,6 +407,41 @@ export const getStreakData = asyncHandler(async (req, res) => {
             sum + topic.revisionCount,
         0
     );
+
+    // for daily data aggregation
+    const activityMap = {};
+
+    topics.forEach(topic => {
+
+        if (topic.completedDate) {
+            const date = topic.completedDate
+                .toISOString()
+                .split("T")[0];
+
+            activityMap[date] =
+                (activityMap[date] || 0) + 1;
+        }
+
+        if (topic.lastRevisedDate) {
+            const date = topic.lastRevisedDate
+                .toISOString()
+                .split("T")[0];
+
+            activityMap[date] =
+                (activityMap[0] || 0) + 1;
+        }
+    })
+
+    // Study activity
+    const studyActivity = Object.entries(activityMap)
+        .map(([date, count]) => ({
+            date,
+            count
+        }))
+        .sort((a, b) =>
+            new Date(a.date) -
+            new Date(b.date)
+        )
 
     return res.status(200).json(
 
@@ -421,7 +453,8 @@ export const getStreakData = asyncHandler(async (req, res) => {
                 studyDaysThisMonth,
                 totalStudyDays: studyDates.length,
                 totalRevisions,
-                last7Days
+                last7Days,
+                studyActivity
             },
             "Streak data fetched successfully"
         )
