@@ -51,7 +51,7 @@ const StreakStats = ({ streakData }) => {
                         className="text-green-600"
                     />
                 }
-                iconBg="bg-blue-100"
+                iconBg="bg-green-100"
             />
         </div>
     )

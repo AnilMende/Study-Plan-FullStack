@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import StreakHeader from "../components/streak/StreakHeader.jsx";
 import { getStreakData } from "../services/streakService.js";
 import StreakStats from "../components/streak/StreakStats.jsx";
+import WeeklyStreakTracker from "../components/streak/WeeklyStreakTracker.jsx";
+import StudyCalendar from "../components/streak/StudyCalendar.jsx";
 
 
 const StreakPage = () => {
@@ -51,6 +53,14 @@ const StreakPage = () => {
 
             <StreakStats
                 streakData={streakData}
+            />
+
+            <WeeklyStreakTracker
+                days={streakData.last7Days}
+            />
+
+            <StudyCalendar
+                activity={streakData.studyActivity}
             />
         </div>
     )
