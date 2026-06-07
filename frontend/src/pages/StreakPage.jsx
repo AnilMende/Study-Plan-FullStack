@@ -4,6 +4,7 @@ import { getStreakData } from "../services/streakService.js";
 import StreakStats from "../components/streak/StreakStats.jsx";
 import WeeklyStreakTracker from "../components/streak/WeeklyStreakTracker.jsx";
 import StudyCalendar from "../components/streak/StudyCalendar.jsx";
+import YearFilter from "../components/streak/YearFilter.jsx";
 
 
 const StreakPage = () => {
@@ -12,6 +13,9 @@ const StreakPage = () => {
     const [streakData, setStreakData] = useState(null);
 
     const [loading, setLoading] = useState(true);
+
+    // year wise streak system for heat map
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
     useEffect(() => {
 
@@ -33,7 +37,7 @@ const StreakPage = () => {
 
         fetchData();
 
-    }, []);
+    }, [selectedYear]);
 
 
     if (loading) {
@@ -51,6 +55,12 @@ const StreakPage = () => {
 
             <StreakHeader />
 
+            <YearFilter
+                years={streakData.availableYears}
+                selectedYear={selectedYear}
+                onChange={setSelectedYear}
+            />
+
             <StreakStats
                 streakData={streakData}
             />
@@ -61,7 +71,9 @@ const StreakPage = () => {
 
             <StudyCalendar
                 activity={streakData.studyActivity}
+                selectedYear={selectedYear}
             />
+
         </div>
     )
 }

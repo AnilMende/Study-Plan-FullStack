@@ -1,6 +1,6 @@
 
 
-const StudyCalendar = ({ activity = [] }) => {
+const StudyCalendar = ({ activity = [], selectedYear }) => {
 
     console.log(activity);
 
@@ -12,27 +12,58 @@ const StudyCalendar = ({ activity = [] }) => {
 
     const today = new Date();
 
-    const TOTAL_DAYS = 180;
+    const TOTAL_DAYS =
+        selectedYear % 4 === 0
+            ? 366
+            : 365;
 
     const days = [];
 
-    for (let i = TOTAL_DAYS - 1; i >= 0; i--) {
+    for (
 
-        const date = new Date(today);
+        let date =
+            new Date(
+                selectedYear,
+                0,
+                1
+            );
 
-        date.setDate(today.getDate() - i);
+        date.getFullYear() ===
+        selectedYear;
 
-        const dateString = date.toISOString().split("T")[0];
+        date.setDate(
+            date.getDate() + 1
+        )
+
+    ) {
+
+        const dateString =
+            date.toISOString()
+                .split("T")[0];
 
         days.push({
+
             date: dateString,
-            count: activityMap[dateString] || 0,
-            month: date.getMonth(),
-            monthName: date.toLocaleString("default", {
-                month: "short"
-            })
+
+            count:
+                activityMap[
+                dateString
+                ] || 0,
+
+            month:
+                date.getMonth(),
+
+            monthName:
+                date.toLocaleString(
+                    "default",
+                    {
+                        month: "short"
+                    }
+                )
         });
+
     }
+
 
     const weeks = [];
 
