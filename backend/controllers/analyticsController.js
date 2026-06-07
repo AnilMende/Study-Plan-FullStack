@@ -285,14 +285,57 @@ export const getStreakData = asyncHandler(async (req, res) => {
     const userId = req.user._id;
 
     // get all completed topics
+    // year wise streak system
+    const year = Number(req.query.year) || new Date().getFullYear();
+
+    // year range
+    const startDate = new Date(year, 0, 1);
+
+    const endDate = new Date(year, 11, 31, 23, 59, 59);
+
+    // Querying only that year
     const topics = await Topic.find({
         userId,
         isDeleted: false,
         $or: [
-            { completedDate: { $ne: null } },
-            { lastRevisedDate: { $ne: null } }
+            {
+                completedDate: {
+                    $gte: startDate,
+                    $lte: endDate
+                }
+            },
+            {
+                lastRevisedDate: {
+                    $gte: startDate,
+                    $lte: endDate
+                }
+            }
         ]
     }).select("completedDate lastRevisedDate revisionCount");
+
+    // Building activity map
+    const activityMap = {};
+
+    topics.forEach(topic => {
+
+        if (topic.completedDate) {
+            const date = topic.completedDate
+                .toISOString()
+                .split("T")[0];
+
+            activityMap[date] =
+                (activityMap[date] || 0) + 1;
+        }
+
+        if (topic.lastRevisedDate) {
+            const date = topic.lastRevisedDate
+                .toISOString()
+                .split("T")[0];
+
+            activityMap[date] =
+                (activityMap[0] || 0) + 1;
+        }
+    })
 
     // get unique study dates
     const studyDates = [
@@ -408,30 +451,6 @@ export const getStreakData = asyncHandler(async (req, res) => {
         0
     );
 
-    // for daily data aggregation
-    const activityMap = {};
-
-    topics.forEach(topic => {
-
-        if (topic.completedDate) {
-            const date = topic.completedDate
-                .toISOString()
-                .split("T")[0];
-
-            activityMap[date] =
-                (activityMap[date] || 0) + 1;
-        }
-
-        if (topic.lastRevisedDate) {
-            const date = topic.lastRevisedDate
-                .toISOString()
-                .split("T")[0];
-
-            activityMap[date] =
-                (activityMap[0] || 0) + 1;
-        }
-    })
-
     // Study activity
     const studyActivity = Object.entries(activityMap)
         .map(([date, count]) => ({
@@ -443,6 +462,56 @@ export const getStreakData = asyncHandler(async (req, res) => {
             new Date(b.date)
         )
 
+    // available years
+    const availableYears = [
+        ...new Set(
+            studyActivity.map(item =>
+                new Date(item.date)
+                    .getFullYear()
+            )
+        )
+    ].sort((a, b) => b - a);
+
+    // Monthly statistics
+    const monthlyStats = [];
+
+    for (let month = 0; month < 12; month++) {
+
+        const monthActivity =
+            studyActivity.filter(item => {
+
+                return (
+                    new Date(item.date)
+                        .getMonth() === month
+                );
+
+            });
+
+        monthlyStats.push({
+
+            month:
+                new Date(
+                    year,
+                    month
+                ).toLocaleString(
+                    "default",
+                    {
+                        month: "short"
+                    }
+                ),
+
+            studyDays:
+                monthActivity.length,
+
+            activities:
+                monthActivity.reduce(
+                    (sum, day) =>
+                        sum + day.count,
+                    0
+                )
+        });
+    }
+
     return res.status(200).json(
 
         new ApiResponse(
@@ -453,6 +522,9 @@ export const getStreakData = asyncHandler(async (req, res) => {
                 studyDaysThisMonth,
                 totalStudyDays: studyDates.length,
                 totalRevisions,
+                selectedYear : year,
+                availableYears,
+                monthlyStats,
                 last7Days,
                 studyActivity
             },
