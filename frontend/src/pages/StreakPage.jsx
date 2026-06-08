@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 import StreakHeader from "../components/streak/StreakHeader.jsx";
-import { getStreakData } from "../services/streakService.js";
 import StreakStats from "../components/streak/StreakStats.jsx";
 import WeeklyStreakTracker from "../components/streak/WeeklyStreakTracker.jsx";
 import StudyCalendar from "../components/streak/StudyCalendar.jsx";
-import YearFilter from "../components/streak/YearFilter.jsx";
-
+import { getStreakData } from "../services/streakService.js";
 
 const StreakPage = () => {
 
@@ -23,7 +21,7 @@ const StreakPage = () => {
 
             try {
 
-                const data = await getStreakData();
+                const data = await getStreakData(selectedYear);
 
                 setStreakData(data);
             } catch (error) {
@@ -55,12 +53,6 @@ const StreakPage = () => {
 
             <StreakHeader />
 
-            <YearFilter
-                years={streakData.availableYears}
-                selectedYear={selectedYear}
-                onChange={setSelectedYear}
-            />
-
             <StreakStats
                 streakData={streakData}
             />
@@ -72,6 +64,8 @@ const StreakPage = () => {
             <StudyCalendar
                 activity={streakData.studyActivity}
                 selectedYear={selectedYear}
+                availableYears={streakData.availableYears}
+                onYearChange={setSelectedYear}
             />
 
         </div>

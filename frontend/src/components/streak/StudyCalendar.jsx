@@ -1,253 +1,165 @@
+import { ChevronDown } from "lucide-react";
+import YearFilter from "./YearFilter.jsx";
 
+const StudyCalendar = ({ activity = [], selectedYear, availableYears, onYearChange }) => {
 
-const StudyCalendar = ({ activity = [], selectedYear }) => {
-
-    console.log(activity);
-
+    // Activity lookup
     const activityMap = {};
 
-    activity.forEach(day => {
+    activity.forEach((day) => {
         activityMap[day.date] = day.count;
     });
 
-    const today = new Date();
+    // Build months
+    const months = [];
 
-    const TOTAL_DAYS =
-        selectedYear % 4 === 0
-            ? 366
-            : 365;
+    for (let month = 0; month < 12; month++) {
 
-    const days = [];
+        const daysInMonth = new Date(
+            selectedYear,
+            month + 1,
+            0
+        ).getDate();
 
-    for (
+        const monthDays = [];
 
-        let date =
-            new Date(
-                selectedYear,
-                0,
-                1
-            );
+        for (let day = 1; day <= daysInMonth; day++) {
 
-        date.getFullYear() ===
-        selectedYear;
+            const dateString =
+                `${selectedYear}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
-        date.setDate(
-            date.getDate() + 1
-        )
-
-    ) {
-
-        const dateString =
-            date.toISOString()
-                .split("T")[0];
-
-        days.push({
-
-            date: dateString,
-
-            count:
-                activityMap[
-                dateString
-                ] || 0,
-
-            month:
-                date.getMonth(),
-
-            monthName:
-                date.toLocaleString(
-                    "default",
-                    {
-                        month: "short"
-                    }
-                )
-        });
-
-    }
-
-
-    const weeks = [];
-
-    for (let i = 0; i < days.length; i += 7) {
-        weeks.push(days.slice(i, i + 7));
-    }
-
-    // generating dynamic month labels
-    const monthLabels = [];
-
-    weeks.forEach((week, index) => {
-
-        const firstDay = week[0];
-
-        if (!firstDay) return;
-
-        if (index === 0 || firstDay.month !== weeks[index - 1][0]?.month) {
-            monthLabels.push({
-                month: firstDay.monthName,
-                index
+            monthDays.push({
+                date: dateString,
+                day,
+                count: activityMap[dateString] || 0
             });
         }
-    });
 
-    // Heatmap Color logic
-    const getColor = (count) => {
-
-        if (!count) {
-            return "bg-gray-300";
-        }
-
-        if (count === 1) {
-            return "bg-green-300"
-        }
-
-        if (count === 2) {
-            return "bg-green-500"
-        }
-
-        if (count <= 4) {
-            return "bg-green-700"
-        }
-
-        return "bg-green-900";
+        months.push({
+            monthName: new Date(
+                selectedYear,
+                month
+            ).toLocaleString("default", {
+                month: "short"
+            }),
+            days: monthDays
+        });
     }
 
+    // Color Intensity
+    const getColor = (count) => {
+
+        if (!count)
+            return "bg-gray-300";
+
+        if (count === 1)
+            return "bg-green-300";
+
+        if (count === 2)
+            return "bg-green-500";
+
+        if (count <= 4)
+            return "bg-green-700";
+
+        return "bg-green-800";
+    };
 
     return (
+
         <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
 
-            <div className="mb-5">
+            {/* Header */}
+            <div
+                className="flex items-center justify-between mb-6"
+            >
 
-                <h3 className="text-lg font-semibold text-gray-900">
-                    Study Activity
-                </h3>
+                <div>
 
-                <p className="text-sm text-gray-500">
-                    Last 180 Days
-                </p>
+                    <h3
+                        className="text-lg font-semibold text-gray-900"
+                    >
+                        Study Activity
+                    </h3>
+
+                    <p
+                        className="text-sm text-gray-500 mt-1"
+                    >
+                        Activity Heatmap of {selectedYear}
+                    </p>
+
+                </div>
+
+                {/* Year Filter */}
+                <YearFilter
+                    availableYears={availableYears}
+                    selectedYear={selectedYear}
+                    onYearChange={onYearChange}
+                />
 
             </div>
 
-            {/* Heatmap */}
-            <div className="overflow-x-auto">
+            {/* Months Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
 
-                {/* Month Labels */}
-                <div className="flex mb-1">
+                {
+                    months.map((month) => (
 
-                    <div className="w-10" />
+                        <div
+                            key={month.monthName}
+                            className="border border-gray-100 rounded-xl p-4 hover:bg-gray-100 cursor-pointer"
+                        >
 
-                    <div className="relative flex">
+                            {/* Month Header */}
+                            <div className="flex items-center justify-between mb-3">
 
-                        {
-                            monthLabels.map((label) => (
+                                <h4 className="font-semibold text-gray-800">
+                                    {month.monthName}
+                                </h4>
 
-                                <span
-                                    key={`${label.month}-${label.index}`}
-                                    className="
-                                        absolute
-                                        text-xs
-                                        text-gray-400
-                                    "
-                                    style={{
-                                        left: `${label.index * 16}px`
-                                    }}
-                                >
-                                    {label.month}
+                                <span className="text-xs text-gray-500">
+                                    {month.days.length} Days
                                 </span>
 
-                            ))
-                        }
+                            </div>
 
-                    </div>
+                            {/* Month Grid */}
+                            <div className="grid grid-cols-7 gap-1">
 
+                                {
+                                    month.days.map((day) => (
 
-                </div>
+                                        <div
+                                            key={day.date}
+                                            title={`${day.date} • ${day.count} activities`}
+                                            className={`
+                                                w-4
+                                                h-4
+                                                rounded-sm
+                                                cursor-pointer
+                                                transition-all
+                                                hover:scale-125
+                                                ${getColor(day.count)}
+                                            `}
+                                        />
 
-                {/* Grid */}
-                <div className="flex">
+                                    ))
+                                }
 
-                    {/* Day Labels */}
-                    <div className="flex flex-col text-xs text-gray-400 mr-3 mt-3">
+                            </div>
 
-                        <div className="h-3"></div>
-
-                        <div className="h-4 mt-1">
-                            Mon
                         </div>
 
-                        <div className="h-4 mt-5">
-                            Wed
-                        </div>
+                    ))
+                }
 
-                        <div className="h-4 mt-5">
-                            Fri
-                        </div>
-
-                    </div>
-
-                    {/* Week Columns */}
-                    <div className="flex gap-1 mt-5">
-                        {
-                            weeks.map((week, weekIndex) => {
-
-                                const currentMonth =
-                                    week[0]?.month;
-
-                                const previousMonth =
-                                    weeks[weekIndex - 1]?.[0]?.month;
-
-                                const isNewMonth =
-                                    weekIndex > 0 &&
-                                    currentMonth !== previousMonth;
-
-                                return (
-
-                                    <div
-                                        key={weekIndex}
-                                        className={`
-                                            flex
-                                            flex-col
-                                            gap-1
-                                            ${isNewMonth ? "ml-3" : ""}
-                                        `}
-                                    >
-
-                                        {
-                                            week.map((day) => (
-
-                                                <div
-                                                    key={day.date}
-                                                    title={`${day.count} activities on ${day.date}`}
-                                                    className={`
-                                                        w-3
-                                                        h-3
-                                                        rounded-sm
-                                                        cursor-pointer
-                                                        transition-all
-                                                        hover:scale-125
-                                                        ${getColor(day.count)}
-                                                    `}
-                                                />
-
-                                            ))
-                                        }
-
-                                    </div>
-
-                                );
-                            })
-                        }
-
-                    </div>
-                </div>
             </div>
 
             {/* Legend */}
-            <div
-                className="flex justify-end items-center gap-2 mt-6 text-xs text-gray-500"
-            >
+            <div className="flex justify-end items-center gap-2 mt-8 text-xs text-gray-500">
 
                 <span>Less</span>
 
-                <div className="w-3 h-3 rounded-sm bg-gray-100" />
+                <div className="w-3 h-3 rounded-sm bg-gray-200" />
 
                 <div className="w-3 h-3 rounded-sm bg-green-200" />
 
@@ -261,9 +173,8 @@ const StudyCalendar = ({ activity = [], selectedYear }) => {
 
             </div>
 
-
         </div>
-    )
-}
+    );
+};
 
 export default StudyCalendar;
