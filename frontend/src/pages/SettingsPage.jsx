@@ -1,3 +1,4 @@
+import DangerZone from "../components/settings/DangerZone.jsx";
 import ProfileSettings from "../components/settings/ProfileSettings.jsx";
 import SecuritySettings from "../components/settings/SecuritySettings.jsx";
 
@@ -9,6 +10,8 @@ const SettingsPage = () => {
             <ProfileSettings/>
 
             <SecuritySettings/>
+
+            <DangerZone/>
         </div>
     )
 }

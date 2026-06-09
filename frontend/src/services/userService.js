@@ -13,3 +13,10 @@ export const updateProfile = async (data) => {
 
     return response.data.data;
 }
+
+export const deleteAccount = async () => {
+
+    const response = await api.delete("/users/delete-account");
+
+    return response.data.data;
+}
