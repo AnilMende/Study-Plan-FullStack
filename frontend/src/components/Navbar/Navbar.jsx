@@ -7,6 +7,7 @@ import SearchDropdown from "../dashboard/searchDropdown.jsx";
 import NotificationDropdown from "../dashboard/NotificationDropdown.jsx";
 import { useLocation } from "react-router-dom";
 import { pageTitles } from "../../utils/pageTitles.js";
+import { updateProfile } from "../../services/userService.js";
 
 const Navbar = ({ onTopicCreated }) => {
 

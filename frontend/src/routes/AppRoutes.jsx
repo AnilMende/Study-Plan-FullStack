@@ -10,6 +10,7 @@ import SubjectDetailsPage from "../pages/SubjectDetailsPage.jsx";
 import AnalyticsPage from "../pages/AnalyticsPage.jsx";
 import RevisionPage from "../pages/RevisionPage.jsx";
 import StreakPage from "../pages/StreakPage.jsx";
+import SettingsPage from "../pages/SettingsPage.jsx";
 
 
 const AppRoutes = () => {
@@ -68,6 +69,11 @@ const AppRoutes = () => {
                     <Route
                         path="/analytics"
                         element={<AnalyticsPage />}
+                    />
+
+                    <Route
+                        path="/settings"
+                        element={<SettingsPage />}
                     />
 
                 </Route>
