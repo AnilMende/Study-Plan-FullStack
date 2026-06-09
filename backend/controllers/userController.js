@@ -71,3 +71,30 @@ export const updateProfile = asyncHandler(async (req, res) => {
     );
 
 })
+
+// Delete account
+export const deleteAccount = asyncHandler(async(req, res) => {
+
+    const userId = req.user._id;
+
+    const user = await User.findById(userId);
+
+    if(!user){
+        throw new ApiError(
+            404,
+            "User not found"
+        )
+    };
+
+    // if user is existing make isDeleted to true
+    user.isDeleted = true;
+
+    await user.save();
+
+    return res.status(200).json(
+        200,
+        null,
+        "Account deleted successfully"
+    );
+    
+})
