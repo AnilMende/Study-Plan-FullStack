@@ -150,3 +150,83 @@ export const getCurrentUser = asyncHandler(async (req, res) => {
         new ApiResponse(200, req.user || null, "Current user fetched")
     );
 })
+
+// Change Password
+export const changePassword = asyncHandler(async (req, res) => {
+
+    const userId = req.user._id;
+
+    const { password, newPassword } = req.body;
+
+    if (!password || !newPassword) {
+
+        throw new ApiError(
+            400,
+            "Current password and new password are required"
+        )
+
+    };
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+
+        throw new ApiError(
+            404,
+            "User not found"
+        )
+
+    };
+
+    // Verify current password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+
+        throw new ApiError(
+            400,
+            "Current password is incorrect"
+        )
+
+    };
+
+    // Prevent from entering the same password
+    //the newPassword and old password shouldn't be same
+    const isSamePassword = await bcrypt.compare(password, user.password);
+
+    if (isSamePassword) {
+
+        throw new ApiError(
+            400,
+            "New password must be different from the old password"
+        )
+
+    };
+
+    // validating the new Password length it must be length of 6
+    if (newPassword.length < 8) {
+
+        throw new ApiError(
+            400,
+            "New password length must be 8 characters"
+        )
+    };
+
+    // Then hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // then make the password in db equal to new hashed password
+    user.password = hashedPassword;
+
+    await user.save();
+
+    return res.status(200).json(
+
+        new ApiResponse(
+            200,
+            null,
+            "Password Updated Successfully"
+        )
+    );
+
+})

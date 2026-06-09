@@ -15,6 +15,7 @@ import calendarRouter from "./routes/calendarRoutes.js";
 import searchRouter from "./routes/searchRoutes.js";
 import notificationRouter from "./routes/notificationRoutes.js";
 import activityRouter from "./routes/activityRoutes.js";
+import userRouter from "./routes/userRoutes.js";
 
 const app = express();
 
@@ -41,6 +42,8 @@ await connectDB();
 
 // API Endpoints
 app.use("/api/auth", authRouter);
+
+app.use("/api/users", userRouter);
 
 app.use("/api/subjects", subjectRouter);
 
