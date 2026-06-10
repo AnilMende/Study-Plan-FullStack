@@ -1,11 +1,14 @@
 import { Bell, Search } from "lucide-react";
-import getInitials from "../../utils/getInitials.js";
 import { useAuth } from "../../context/AuthContext.jsx";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
+
+import getInitials from "../../utils/getInitials.js";
 import AddTopicModal from "../dashboard/AddTopicModal.jsx";
 import SearchDropdown from "../dashboard/searchDropdown.jsx";
 import NotificationDropdown from "../dashboard/NotificationDropdown.jsx";
-import { useLocation } from "react-router-dom";
+import UserProfile from "./UserProfile.jsx";
+
 import { pageTitles } from "../../utils/pageTitles.js";
 import { updateProfile } from "../../services/userService.js";
 
@@ -15,9 +18,43 @@ const Navbar = ({ onTopicCreated }) => {
 
     const [openModal, setOpenModal] = useState(false);
 
+    const [showModal, setShowModal] = useState(false);
+
     const location = useLocation();
 
     const currentTitle = pageTitles[location.pathname] || "Dashboard";
+
+    const profileRef = useRef();
+
+    useEffect(() => {
+
+        const handleClickOutside =
+            (event) => {
+
+                if (
+                    profileRef.current &&
+                    !profileRef.current.contains(
+                        event.target
+                    )
+                ) {
+
+                    setShowModal(false);
+
+                }
+            };
+
+        document.addEventListener(
+            "mousedown",
+            handleClickOutside
+        );
+
+        return () =>
+            document.removeEventListener(
+                "mousedown",
+                handleClickOutside
+            );
+
+    }, []);
 
 
     return (
@@ -41,13 +78,7 @@ const Navbar = ({ onTopicCreated }) => {
                         className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
                     />
 
-                    {/* <input
-                        type="text"
-                        placeholder="Search topics, subjects..."
-                        className="w-[260px] pl-10 pr-4 py-3 rounded-xl border border-gray-200 
-                        outline-none focus:ring-2 focus:ring-blue-500"
-                    /> */}
-                    <SearchDropdown/>
+                    <SearchDropdown />
 
                 </div>
 
@@ -60,16 +91,32 @@ const Navbar = ({ onTopicCreated }) => {
                 </button>
 
                 {/* Notification */}
-                {/* <button className="w-11 h-11 rounded-xl border border-gray-200 flex items-center 
-                justify-center hover:bg-gray-100">
-                    <Bell size={20} className="text-gray-600" />
-                </button> */}
-                <NotificationDropdown/>
+                <NotificationDropdown />
 
                 {/* Avatar */}
-                <div className="w-11 h-11 rounded-full bg-blue-600 text-white flex items-center 
-                justify-center font-semibold text-sm">
-                    {getInitials(user?.name)}
+                <div ref={profileRef}
+                    className="relative"
+                >
+                    <div className="relative">
+                        <button
+                            className="w-11 h-11 rounded-full bg-blue-600 
+                        text-white flex items-center justify-center 
+                        font-semibold text-sm cursor-pointer"
+                            onClick={() => setShowModal(!showModal)}
+                        >
+
+                            {getInitials(user?.name)}
+
+                        </button>
+                        {
+                            showModal && (
+                                <UserProfile
+                                    onClose={() => setOpenModal(false)}
+                                />
+                            )
+                        }
+
+                    </div>
                 </div>
 
             </div>
