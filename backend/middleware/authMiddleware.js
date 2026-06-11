@@ -13,6 +13,8 @@ export const verifyAccessToken = asyncHandler(async (req, res, next) => {
 
     const token = req.cookies?.accessToken;
 
+    //console.log("Access Token", token);
+
     if (!token) {
         throw new ApiError(401, "Unauthorized");
     }
@@ -22,7 +24,22 @@ export const verifyAccessToken = asyncHandler(async (req, res, next) => {
     try {
         decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     } catch (error) {
-        throw new ApiError(401, "Token expired");
+        //throw new ApiError(401, "Token expired");
+        if (
+            error.name ===
+            "TokenExpiredError"
+        ) {
+
+            throw new ApiError(
+                401,
+                "Token expired"
+            );
+        }
+
+        throw new ApiError(
+            401,
+            "Invalid token"
+        );
     }
 
     const user = await User.findById(decoded.id).select("-password");
@@ -39,11 +56,15 @@ export const verifyAccessToken = asyncHandler(async (req, res, next) => {
 //handling the expiry of the access token
 export const refreshAccessToken = asyncHandler(async (req, res) => {
 
+    console.log("Refresh Endpoint hit");
+
     const incomingRefreshToken = req.cookies?.refreshToken;
 
     if (!incomingRefreshToken) {
         throw new ApiError(401, "No refresh token");
     }
+
+    console.log("Refresh token exists:", !!incomingRefreshToken);
 
     let decoded;
     try {
@@ -83,27 +104,58 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
 
 export const optionalAuth = asyncHandler(async (req, res, next) => {
 
+    // try {
+
+    //     const token = req.cookies?.accessToken;
+
+    //     if (!token) {
+    //         req.user = null;
+
+    //         return next();
+    //     }
+
+    //     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+
+    //     const user = await User.findById(decoded.id).select("-password");
+
+    //     req.user = user || null;
+
+    //     next();
+
+    // } catch (error) {
+
+    //     req.user = null;
+    //     next();
+    // }
+    const accessToken =
+        req.cookies?.accessToken;
+
+    if (!accessToken) {
+
+        req.user = null;
+
+        return next();
+    }
+
     try {
 
-        const token = req.cookies?.accessToken;
+        const decoded = jwt.verify(
+            accessToken,
+            process.env.ACCESS_TOKEN_SECRET
+        );
 
-        if (!token) {
-            req.user = null;
+        const user =
+            await User.findById(decoded.id)
+                .select("-password");
 
-            return next();
-        }
+        req.user = user;
 
-        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-
-        const user = await User.findById(decoded.id).select("-password");
-
-        req.user = user || null;
-
-        next();
+        return next();
 
     } catch (error) {
 
         req.user = null;
-        next();
+
+        return next();
     }
 })
