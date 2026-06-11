@@ -68,29 +68,57 @@ api.interceptors.response.use(
 
             isRefreshing = true;
 
+            // try {
+
+            //     // call refresh endpoint
+            //     await api.post("/auth/refresh-token");
+
+            //     // Retry all queue requests
+            //     processQueue(null);
+
+            //     // Retry original request
+            //     return api(originalRequest);
+
+            // } catch (refreshError) {
+
+            //     processQueue(refreshError);
+
+            //     // Logout situation
+            //     window.location.href = "/login";
+
+            //     return Promise.reject(refreshError);
+            // } finally {
+
+            //     isRefreshing = false;
+
+            // }
             try {
 
-                // call refresh endpoint
-                await api.post("/auth/refresh-token");
+                console.log(
+                    "Attempting refresh token..."
+                );
 
-                // Retry all queue requests
+                await api.post(
+                    "/auth/refresh-token"
+                );
+
+                console.log(
+                    "Refresh successful"
+                );
+
                 processQueue(null);
 
-                // Retry original request
                 return api(originalRequest);
 
-            } catch (refreshError) {
+            }
+            catch (err) {
 
-                processQueue(refreshError);
+                console.log(
+                    "Refresh failed",
+                    err.response?.data
+                );
 
-                // Logout situation
-                window.location.href = "/login";
-
-                return Promise.reject(refreshError);
-            } finally {
-
-                isRefreshing = false;
-
+                throw err;
             }
         }
 
