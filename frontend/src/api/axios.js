@@ -43,8 +43,8 @@ api.interceptors.response.use(
             !originalRequest._retry &&
             !originalRequest.url.includes("/auth/login") &&
             !originalRequest.url.includes("/auth/register") &&
-            !originalRequest.url.includes("/auth/refresh-token") &&
-            !originalRequest.url.includes("/auth/me")) {
+            !originalRequest.url.includes("/auth/refresh-token")
+        ) {
 
             // prevent infinite retry loop
             originalRequest._retry = true;
@@ -68,57 +68,23 @@ api.interceptors.response.use(
 
             isRefreshing = true;
 
-            // try {
-
-            //     // call refresh endpoint
-            //     await api.post("/auth/refresh-token");
-
-            //     // Retry all queue requests
-            //     processQueue(null);
-
-            //     // Retry original request
-            //     return api(originalRequest);
-
-            // } catch (refreshError) {
-
-            //     processQueue(refreshError);
-
-            //     // Logout situation
-            //     window.location.href = "/login";
-
-            //     return Promise.reject(refreshError);
-            // } finally {
-
-            //     isRefreshing = false;
-
-            // }
             try {
 
-                console.log(
-                    "Attempting refresh token..."
-                );
-
-                await api.post(
-                    "/auth/refresh-token"
-                );
-
-                console.log(
-                    "Refresh successful"
-                );
+                await api.post("/auth/refresh-token");
 
                 processQueue(null);
 
                 return api(originalRequest);
 
-            }
-            catch (err) {
+            } catch (err) {
 
-                console.log(
-                    "Refresh failed",
-                    err.response?.data
-                );
+                processQueue(err);
 
-                throw err;
+                return Promise.reject(err);
+
+            } finally {
+
+                isRefreshing = false;
             }
         }
 
