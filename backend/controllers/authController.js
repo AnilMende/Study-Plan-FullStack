@@ -133,12 +133,13 @@ export const userLogout = asyncHandler(async (req, res) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000
     }
 
     return res
         .status(200)
         .clearCookie("accessToken", cookieOptions)
-        .clearCookie("refreshToken", cookieOptions )
+        .clearCookie("refreshToken", cookieOptions)
         .json(
             new ApiResponse(200, {}, "Logged out successfully")
         )

@@ -56,7 +56,7 @@ export const verifyAccessToken = asyncHandler(async (req, res, next) => {
 //handling the expiry of the access token
 export const refreshAccessToken = asyncHandler(async (req, res) => {
 
-    console.log("Refresh Endpoint hit");
+    //console.log("Refresh Endpoint hit");
 
     const incomingRefreshToken = req.cookies?.refreshToken;
 
@@ -64,7 +64,7 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
         throw new ApiError(401, "No refresh token");
     }
 
-    console.log("Refresh token exists:", !!incomingRefreshToken);
+    //console.log("Refresh token exists:", !!incomingRefreshToken);
 
     let decoded;
     try {
@@ -91,6 +91,7 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000
     }
 
     return res

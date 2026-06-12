@@ -1,5 +1,5 @@
 import express from "express";
-import { getCurrentUser, userLogin, userLogout, userRegister } from "../controllers/authController.js";
+import { changePassword, getCurrentUser, userLogin, userLogout, userRegister } from "../controllers/authController.js";
 import { optionalAuth, refreshAccessToken, verifyAccessToken } from "../middleware/authMiddleware.js";
 
 const authRouter = express.Router();
@@ -10,8 +10,10 @@ authRouter.post("/login", userLogin);
 
 authRouter.post("/refresh-token", refreshAccessToken);
 
-authRouter.get("/me", optionalAuth, getCurrentUser);
+authRouter.get("/me", verifyAccessToken, getCurrentUser);
 
-authRouter.post("/logout", verifyAccessToken, userLogout);
+authRouter.post("/logout", userLogout);
+
+authRouter.put("/change-password", verifyAccessToken, changePassword);
 
 export default authRouter;
