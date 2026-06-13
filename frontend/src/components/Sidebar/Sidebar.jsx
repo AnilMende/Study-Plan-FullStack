@@ -8,9 +8,9 @@ import {
 } from "lucide-react";
 
 import { NavLink } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext.jsx";
-import { logoutUser } from "../../services/authService.js";
-import toast from "react-hot-toast";
+
+import { useState } from "react";
+import LogoutModal from "./LogoutModal.jsx";
 
 const navItems = [
     {
@@ -51,22 +51,7 @@ const navItems = [
 ]
 const Sidebar = () => {
 
-    const { setUser } = useAuth();
-
-    // Logout handler
-    const handleLogout = async () => {
-
-        try {
-
-            await logoutUser();
-            setUser(null);
-            toast.success("Logged Out Successfully");
-
-        } catch (error) {
-            //console.log(error);
-            toast.error("LogOut failed");
-        }
-    }
+    const [showModal, setShowModal] = useState(false);
 
     return (
         <aside className="w-[240px] h-screen sticky top-0 bg-white border-r border-gray-200 flex flex-col justify-between">
@@ -118,13 +103,20 @@ const Sidebar = () => {
             {/* Logout */}
             <div className="p-4 border-t border-gray-100 bg-white">
 
-                <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-500 
-                    hover:bg-gray-100 hover:text-gray-900 transition-all cursor-pointer">
+                <button onClick={() => setShowModal(true)} className="w-full flex items-center gap-3 px-4 py-3 
+                rounded-xl text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-all cursor-pointer">
                     <LogOut size={20} />
                     <span>Logout</span>
                 </button>
 
             </div>
+            {
+                showModal && (
+                    <LogoutModal
+                        onClose={() => setShowModal(false)}
+                    />
+                )
+            }
 
         </aside>
     )
