@@ -2,6 +2,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/AsyncHandler.js";
 import Subject from "../models/subjectModel.js";
 import Topic from "../models/topicModel.js";
+import { calculateCurrentStreak } from "../utils/streakUtils.js";
 
 
 export const getDashboardData = asyncHandler(async (req, res) => {
@@ -98,6 +99,48 @@ export const getDashboardData = asyncHandler(async (req, res) => {
         })
     );
 
+    // Current Streak Calculation
+    const streakTopics = await Topic.find({
+        userId,
+        isDeleted: false,
+        $or: [
+            { completedDate: { $ne: null } },
+            { lastRevisedDate: { $ne: null } }
+        ]
+    }).select("completedDate lastRevisedDate");
+
+    // Get Unique Study Dates
+    const studyDates = [
+        ...new Set(
+
+            streakTopics.flatMap(topic => {
+
+                const dates = [];
+
+                if (topic.completedDate) {
+                    dates.push(
+                        topic.completedDate
+                            .toISOString()
+                            .split("T")[0]
+                    );
+                }
+
+                if (topic.lastRevisedDate) {
+                    dates.push(
+                        topic.lastRevisedDate
+                            .toISOString()
+                            .split("T")[0]
+                    );
+                }
+
+                return dates;
+            })
+        )
+    ].sort();
+
+    // now calcuate currentStreak by passing studyDates
+    const currentStreak = calculateCurrentStreak(studyDates);
+
     // Response 
     return res.status(200).json(
         new ApiResponse(
@@ -106,7 +149,7 @@ export const getDashboardData = asyncHandler(async (req, res) => {
                 totalTopics,
                 completedToday,
                 pendingTasks,
-                currentStreak: 12,
+                currentStreak,
                 todaysPlan,
                 recentActivity,
                 subjectProgress

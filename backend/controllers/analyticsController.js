@@ -1,6 +1,7 @@
 import Topic from "../models/topicModel.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/AsyncHandler.js";
+import { calculateCurrentStreak } from "../utils/streakUtils.js";
 
 
 export const getAnalyticsData = asyncHandler(async (req, res) => {
@@ -368,24 +369,27 @@ export const getStreakData = asyncHandler(async (req, res) => {
         )
     ].sort();
 
-    // Current Streak
-    let currentStreak = 0;
+     // Current Streak
+    // let currentStreak = 0;
+
+    // let checkDate = new Date(today);
+
+    // // if the checkDate is in studyDate increment the currentStreak
+    // while (studyDates.includes(
+    //     checkDate.toISOString().split("T")[0]
+    // )) {
+    //     currentStreak++;
+
+    //     checkDate.setDate(
+    //         checkDate.getDate() - 1
+    //     );
+    // }
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    let checkDate = new Date(today);
 
-    // if the checkDate is in studyDate increment the currentStreak
-    while (studyDates.includes(
-        checkDate.toISOString().split("T")[0]
-    )) {
-        currentStreak++;
-
-        checkDate.setDate(
-            checkDate.getDate() - 1
-        );
-    }
+    const currentStreak = calculateCurrentStreak(studyDates);
 
     // Longest Streak
     let longestStreak = 0;
