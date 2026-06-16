@@ -45,7 +45,7 @@ const Dashboard = () => {
                 <StatsCard
                     title="Total Topics"
                     value={stats?.totalTopics || 0}
-                    subtitle="View all"
+                    subtitle=""
                     icon={
                         <NotebookPen
                             className="text-blue-600"
@@ -58,7 +58,7 @@ const Dashboard = () => {
                 <StatsCard
                     title="Completed Today"
                     value={stats?.completedToday || 0}
-                    subtitle="View all"
+                    subtitle=""
                     icon={
                         <CheckCircle2
                             className="text-green-600"
@@ -71,7 +71,7 @@ const Dashboard = () => {
                 <StatsCard
                     title="Pending Tasks"
                     value={stats?.pendingTasks || 0}
-                    subtitle="View all"
+                    subtitle=""
                     icon={
                         <Clock3
                             className="text-yellow-600"

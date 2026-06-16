@@ -87,7 +87,7 @@ const CalendarGrid = ({
         cells.push(
             <div
                 key={`empty-${i}`}
-                className="h-24"
+                className="h-16"
             />
         );
     }
@@ -113,13 +113,13 @@ const CalendarGrid = ({
                 key={day}
                 onClick={() => setSelectedDate(formattedDate)}
                 className={`
-                    h-24 rounded-xl border cursor-pointer
+                    h-16 rounded-xl border cursor-pointer
                     transition-all duration-200
                     p-2 flex flex-col items-center justify-start
-                    hover:bg-gray-50
+                    hover:bg-gray-200
                     ${isSelected
                         ? "border-blue-500 bg-blue-50"
-                        : "border-gray-100 bg-white"
+                        : "border-gray-300 bg-white"
                     }
                 `}
             >
@@ -175,7 +175,7 @@ const CalendarGrid = ({
                         className="
                             w-9 h-9 rounded-lg border border-gray-200
                             flex items-center justify-center
-                            hover:bg-gray-100
+                            hover:bg-gray-100 cursor-pointer
                         "
                     >
                         <ChevronLeft size={18} />
@@ -190,7 +190,7 @@ const CalendarGrid = ({
                         className="
                             w-9 h-9 rounded-lg border border-gray-200
                             flex items-center justify-center
-                            hover:bg-gray-100
+                            hover:bg-gray-100 cursor-pointer
                         "
                     >
                         <ChevronRight size={18} />
@@ -206,6 +206,7 @@ const CalendarGrid = ({
                         border border-gray-200
                         text-sm font-medium
                         hover:bg-gray-100
+                        cursor-pointer
                     "
                 >
                     Today
