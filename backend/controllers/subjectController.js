@@ -111,17 +111,41 @@ export const deleteSubject = asyncHandler(async (req, res) => {
     const userId = req.user._id;
 
     const subject = await Subject.findOneAndUpdate(
-        { _id: id, userId },
-        { isDeleted: true },
-        { new: true }
+        {
+            _id: id,
+            userId
+        },
+        {
+            isDeleted: true
+        },
+        {
+            new: true
+        }
     );
 
     if (!subject) {
         throw new ApiError(404, "Subject not found or unauthorized");
     }
 
+    // now delete all the topics belonging to that subject
+    await Topic.updateMany(
+        {
+            subjectId: id,
+            userId
+        },
+        {
+            $set: {
+                isDeleted: true
+            }
+        }
+    );
+
     return res.status(200).json(
-        new ApiResponse(200, {}, "Subject deleted successfully")
+        new ApiResponse(
+            200,
+            {},
+            "Subject and related topics deleted successfully"
+        )
     );
 
 });
