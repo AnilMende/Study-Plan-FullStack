@@ -97,8 +97,10 @@ const RecentActivity = ({ refreshKey }) => {
                     Recent Activity
                 </h2>
 
-                <button className="text-blue-600 text-sm font-medium 
-                hover:text-blue-700 cursor-pointer">View all →</button>
+                {/* <button className="text-blue-600 text-sm font-medium 
+                hover:text-blue-700 cursor-pointer">
+                    View all →
+                </button> */}
 
             </div>
 

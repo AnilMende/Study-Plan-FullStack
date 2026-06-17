@@ -66,7 +66,7 @@ const Sidebar = () => {
 
                     <span className="text-sm font-semibold text-slate-700 
                     group-hover:text-slate-900 transition-colors">
-                        StudyPlan
+                        ChadhuvukoMawa
                     </span>
 
                 </div>

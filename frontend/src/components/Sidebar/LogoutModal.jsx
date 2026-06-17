@@ -24,15 +24,15 @@ const LogoutModal = ({ onClose }) => {
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+        <div className="fixed inset-0 z-50 flex items-center justify-center"
             onClick={onClose}
         >
 
             {/* Modal */}
             <div onClick={(e) => e.stopPropagation()}
-                className="bg-white w-full max-w-md rounded-2xl shadow-2xl p-6 animate-in fade-in zoom-in">
+                className="bg-white w-full max-w-lg min-h-[320px] rounded-2xl shadow-2xl p-8 animate-in fade-in zoom-in">
                 {/* Icon */}
-                <div className="flex justify-center mb-4">
+                <div className="flex justify-center mb-6">
 
                     <div className="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center">
                         <LogOut size={28} className="text-red-600" />
@@ -50,13 +50,13 @@ const LogoutModal = ({ onClose }) => {
 
                 {/* Message */}
                 <p
-                    className="text-center text-gray-500mt-2"
+                    className="text-center text-gray-500 mt-3"
                 >
                     Are you sure you want to logout from your account?
                 </p>
 
                 {/* Buttons */}
-                <div className="flex gap-3 mt-6"
+                <div className="flex gap-3 mt-8"
                 >
 
                     <button
