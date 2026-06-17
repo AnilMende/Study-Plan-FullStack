@@ -16,23 +16,23 @@ const TopicsTable = ({ topics, onDelete, onStatusChange, onTopicEdit }) => {
 
                         <tr className="border-t border-gray-100 hover:bg-gray-50 transition-colors group">
 
-                            <th className="px-6 py-4 text-left text-xs font-semibold tracking-wide text-gray-900 uppercase">
+                            <th className="px-6 py-3 text-left text-xs font-semibold tracking-wide text-gray-900 uppercase">
                                 Topic
                             </th>
 
-                            <th className="px-6 py-4 text-left text-xs font-semibold tracking-wide text-gray-900 uppercase">
+                            <th className="px-6 py-3 text-left text-xs font-semibold tracking-wide text-gray-900 uppercase">
                                 Status
                             </th>
 
-                            <th className="px-6 py-4 text-left text-xs font-semibold tracking-wide text-gray-900 uppercase">
+                            <th className="px-6 py-3 text-left text-xs font-semibold tracking-wide text-gray-900 uppercase">
                                 Planned Date
                             </th>
 
-                            <th className="px-6 py-4 text-left text-xs font-semibold tracking-wide text-gray-900 uppercase">
+                            <th className="px-6 py-3 text-left text-xs font-semibold tracking-wide text-gray-900 uppercase">
                                 Revisions
                             </th>
 
-                            <th className="px-6 py-4 text-left text-xs font-semibold tracking-wide text-gray-900 uppercase">
+                            <th className="px-6 py-3 text-left text-xs font-semibold tracking-wide text-gray-900 uppercase">
                                 Actions
                             </th>
 

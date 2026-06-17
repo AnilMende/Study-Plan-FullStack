@@ -11,7 +11,7 @@ const RevisionHistory = ({ topics }) => {
         .sort(
             (a, b) =>
                 new Date(
-                    b, lastRevisedDate
+                    b.lastRevisedDate
                 ) -
                 new Date(
                     a.lastRevisedDate

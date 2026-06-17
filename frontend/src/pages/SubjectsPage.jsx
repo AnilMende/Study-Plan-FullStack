@@ -4,7 +4,6 @@ import SubjectsHeader from "../components/subjects/SubjectsHeader.jsx";
 import SubjectsGrid from "../components/subjects/SubjectsGrid.jsx";
 import CreateSubjectModel from "../components/subjects/CreateSubjectModel.jsx";
 
-
 const SubjectsPage = () => {
 
     const [subjects, setSubjects] = useState([]);
@@ -52,6 +51,16 @@ const SubjectsPage = () => {
         );
     }, [subjects, search]);
 
+    // delete Subject
+    const handleSubjectDeleted = async (subjectId) => {
+
+        setSubjects(prev =>
+            prev.filter(
+                subject => subject._id !== subjectId
+            )
+        );
+    };
+
     return (
         <div className="space-y-6">
 
@@ -69,7 +78,10 @@ const SubjectsPage = () => {
                         Loading Subjects...
                     </div>
                 ) : (
-                    <SubjectsGrid subjects={filteredSubjects} />
+                    <SubjectsGrid
+                        subjects={filteredSubjects}
+                        onSubjectDeleted={handleSubjectDeleted}
+                    />
                 )
             }
 

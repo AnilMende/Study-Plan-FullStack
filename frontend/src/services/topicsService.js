@@ -33,7 +33,7 @@ export const getTopics = async (params = {}) => {
 
 export const deleteTopic = async (id) => {
 
-    const response = await api.delete(`/topics/deleted/${id}`);
+    const response = await api.delete(`/topics/delete/${id}`);
 
     return response.data.data;
 }

@@ -1,4 +1,5 @@
 import EditTopicModal from "./EditTopicModal.jsx";
+import PriorityBadge from "./PriorityBadge.jsx";
 import StatusBadge from "./StatusBadge.jsx";
 import { CheckCircle2, Edit2, RotateCcw, SquarePen, Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -13,7 +14,7 @@ const TopicRow = ({ topic, onDelete, onStatusChange, onTopicEdit }) => {
         <tr className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
 
             {/* Title */}
-            <td className="py-4 px-4">
+            <td className="px-4 py-4">
                 <div>
 
                     <p className="font-medium text-gray-900">
@@ -21,31 +22,31 @@ const TopicRow = ({ topic, onDelete, onStatusChange, onTopicEdit }) => {
                     </p>
 
                     <p className="text-sm text-gray-700">
-                        {topic.priority} priority
+                        <PriorityBadge priority={topic.priority}/>  priority
                     </p>
 
                 </div>
             </td>
 
             {/* Status */}
-            <td className="py-4 px-4">
+            <td className="px-4 py-4">
                 <StatusBadge status={topic.status} />
             </td>
 
             {/* Planned date */}
-            <td className="py-4 px-4 text-sm text-gray-600">
+            <td className="px-4 py-4 text-sm text-gray-600">
                 {
                     topic.plannedDate ? new Date(topic.plannedDate).toLocaleDateString() : "-"
                 }
             </td>
 
             {/* revision count */}
-            <td className="py-4 px-4 text-sm text-gray-600">
+            <td className="px-4 py-4 text-sm text-gray-600">
                 {topic.revisionCount}
             </td>
 
             {/* Actions */}
-            <td className="py-4 px-4">
+            <td className="px-4 py-4">
 
                 <div className="flex items-center gap-2">
 

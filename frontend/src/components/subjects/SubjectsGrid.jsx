@@ -1,6 +1,6 @@
 import SubjectCard from "./SubjectCard.jsx";
 
-const SubjectsGrid = ({ subjects }) => {
+const SubjectsGrid = ({ subjects, onSubjectDeleted }) => {
 
     if (!subjects.length) {
         return (
@@ -25,6 +25,7 @@ const SubjectsGrid = ({ subjects }) => {
                     <SubjectCard
                         key={subject._id}
                         subject={subject}
+                        onSubjectDeleted={onSubjectDeleted}
                     />
                 ))
             }
