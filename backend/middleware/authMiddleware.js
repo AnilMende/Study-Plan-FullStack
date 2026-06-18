@@ -1,5 +1,5 @@
-import dotenv from "dotenv";
-dotenv.config();
+// import dotenv from "dotenv";
+// dotenv.config();
 import { generateTokens } from "../controllers/authController.js";
 import User from "../models/userModel.js";
 import { asyncHandler } from "../utils/AsyncHandler.js";
