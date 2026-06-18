@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 
 import getInitials from "../../utils/getInitials.js";
 import AddTopicModal from "../dashboard/AddTopicModal.jsx";
-import SearchDropdown from "../dashboard/searchDropdown.jsx";
+import SearchDropdown from "../dashboard/SearchDropdown.jsx";
 import NotificationDropdown from "../dashboard/NotificationDropdown.jsx";
 import UserProfile from "./UserProfile.jsx";
 

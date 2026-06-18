@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import CalendarHeader from "../components/Calendar/CalendarHeader.jsx";
-import CalendarGrid from "../components/Calendar/CalendarGrid.jsx";
-import DayTopicsPanel from "../components/Calendar/DayTopicsPanel.jsx";
+import CalendarHeader from "../components/calendar/CalendarHeader.jsx";
+import CalendarGrid from "../components/calendar/CalendarGrid.jsx";
+import DayTopicsPanel from "../components/calendar/DayTopicsPanel.jsx";
 
 import dayjs from "dayjs";
 import { getMonthlyCalendar, getTopicsByDay } from "../services/calendarService.js";

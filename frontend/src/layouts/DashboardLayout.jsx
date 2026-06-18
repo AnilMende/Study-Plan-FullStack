@@ -1,5 +1,5 @@
-import Navbar from "../components/Navbar/Navbar.jsx";
-import Sidebar from "../components/Sidebar/Sidebar.jsx";
+import Navbar from "../components/navbar/Navbar.jsx";
+import Sidebar from "../components/sidebar/Sidebar.jsx";
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
 
