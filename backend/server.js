@@ -20,7 +20,7 @@ import userRouter from "./routes/userRoutes.js";
 const app = express();
 
 app.use(cors({
-    origin : "http://localhost:5173",
+    origin : "https://my-study-planner-mu.vercel.app",
     methods : ["GET", "POST", "PUT", "UPDATE", "DELETE", "PATCH"],
     credentials : true
 }));
