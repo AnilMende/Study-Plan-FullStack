@@ -1,4 +1,4 @@
-import StatsCard from "../cards/StatsCard";
+import StatsCard from "../components/Cards/StatsCard.jsx";
 import { BookOpen, TrendingUp, Clock3, CheckCircle2 } from "lucide-react";
 
 const AnalyticsStats = ({ analytics }) => {

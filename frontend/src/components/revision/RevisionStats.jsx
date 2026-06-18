@@ -1,4 +1,4 @@
-import StatsCard from "../cards/StatsCard.jsx";
+import StatsCard from "../components/Cards/StatsCard.jsx";
 
 import { RotateCcw, BookCheck, CalendarClock, Trophy } from "lucide-react";
 
