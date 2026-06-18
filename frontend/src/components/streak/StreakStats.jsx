@@ -1,5 +1,5 @@
 import { BookOpen, Calendar, Flame, Trophy } from "lucide-react";
-import StatsCard from "../cards/StatsCard.jsx";
+import StatsCard from "../components/Cards/StatsCard.jsx";
 
 const StreakStats = ({ streakData }) => {
 
